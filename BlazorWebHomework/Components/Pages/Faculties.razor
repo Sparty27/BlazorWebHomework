@@ -2,8 +2,9 @@
 @inject HttpClient HttpClient
 @rendermode InteractiveServer
 
-<h3>Faculties</h3>
+<h3 class="faculties__header">Факультети</h3>
 
+<RadzenButton Style="border-radius:25px;margin-bottom:25px;" Icon="add" Text="Добавити"></RadzenButton>
 
 @if (faculties == null)
 {
@@ -15,17 +16,28 @@ else
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Факультет</th>
+                <th>Примітка</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var faculty in faculties)
             {
                 <tr>
-                    <td>@faculty.FacultyId</td>
+                    <td class="faculties__data">
+                        <div class="faculties__data-id">
+                            @faculty.FacultyId
+                        </div>
+                    </td>
                     <td>@faculty.FacultyName</td>
                     <td>@faculty.FacultyNotes</td>
-                    <td></td>
+                    <td class="faculties__data">
+                        <div class="faculties__data-block">
+                            <RadzenButton ButtonStyle="ButtonStyle.Success">Edit</RadzenButton>
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger">Delete</RadzenButton>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
