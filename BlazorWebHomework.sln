@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebHomework.API", "Bl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebHomework.Models", "BlazorWebHomework.Models\BlazorWebHomework.Models.csproj", "{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BlazorWebHomework.DB", "BlazorWebHomework.DB\BlazorWebHomework.DB.sqlproj", "{431C341B-A85F-4BF9-846F-28C991076F4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431C341B-A85F-4BF9-846F-28C991076F4C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
