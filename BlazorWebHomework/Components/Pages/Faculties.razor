@@ -1,0 +1,45 @@
+﻿@page "/faculties"
+@inject HttpClient HttpClient
+@rendermode InteractiveServer
+
+<h3>Faculties</h3>
+
+
+@if (faculties == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faculty in faculties)
+            {
+                <tr>
+                    <td>@faculty.FacultyId</td>
+                    <td>@faculty.FacultyName</td>
+                    <td>@faculty.FacultyNotes</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<Faculty>? faculties = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(HttpClient.BaseAddress);
+        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties");
+    }
+
+}
