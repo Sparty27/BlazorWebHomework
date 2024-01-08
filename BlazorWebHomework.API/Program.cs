@@ -1,7 +1,3 @@
-using MINT_WebAPI.Managers;
-using MINT_WebAPI.Managers.CategoryManaging;
-using MINT_WebAPI.Managers.StoreManaging;
-
 namespace MINT_WebAPI
 {
     public class Program
@@ -10,8 +6,6 @@ namespace MINT_WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddScoped<ICategoryManager, CategoryManager>();
-            builder.Services.AddScoped<IStoreManager, StoreManager>();
 
             builder.Services.AddCors();
             builder.Services.AddControllers();

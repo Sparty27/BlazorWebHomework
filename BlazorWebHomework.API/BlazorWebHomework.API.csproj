@@ -17,4 +17,8 @@
     <ProjectReference Include="..\BlazorWebHomework.Models\BlazorWebHomework.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Managers\" />
+  </ItemGroup>
+
 </Project>

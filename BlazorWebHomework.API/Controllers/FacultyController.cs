@@ -1,7 +1,6 @@
 ﻿using BlazorWebHomeworkAPI.DataControllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using MINT_WebAPI.Managers.CategoryManaging;
 using BlazorWebHomework.Models;
 
 
