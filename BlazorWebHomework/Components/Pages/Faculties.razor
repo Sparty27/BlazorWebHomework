@@ -2,9 +2,10 @@
 @inject HttpClient HttpClient
 @rendermode InteractiveServer
 
-<h3 class="faculties__header">Факультети</h3>
+<PageTitle>Факультети</PageTitle>
+<h3 class="tracking-widest text-4xl font-bold text-gray-900 dark:text-white mb-[20px]">Факультети</h3>
 
-<RadzenButton Style="border-radius:25px;margin-bottom:25px;" Icon="add" Text="Добавити"></RadzenButton>
+<RadzenButton Icon="add" Text="Добавити" class="bg-gradient-to-r from-purple-500 to-pink-500 mb-[25px] rounded-[25px]"></RadzenButton>
 
 @if (faculties == null)
 {
@@ -30,12 +31,12 @@ else
                             @faculty.FacultyId
                         </div>
                     </td>
-                    <td>@faculty.FacultyName</td>
-                    <td>@faculty.FacultyNotes</td>
+                    <td class="faculties__data">@faculty.FacultyName</td>
+                    <td class="faculties__data">@faculty.FacultyNotes</td>
                     <td class="faculties__data">
                         <div class="faculties__data-block">
-                            <RadzenButton ButtonStyle="ButtonStyle.Success">Edit</RadzenButton>
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger">Delete</RadzenButton>
+                            <RadzenButton>Edit</RadzenButton>
+                            <RadzenButton>Delete</RadzenButton>
                         </div>
                     </td>
                 </tr>
