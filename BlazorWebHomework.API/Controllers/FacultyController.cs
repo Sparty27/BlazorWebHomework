@@ -57,5 +57,26 @@ namespace BlazorWebHomeworkAPI.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpDelete("DeleteFaculty")]
+        public IActionResult DeleteFaculty(int facultyId)
+        {
+            try
+            {
+                var result = _facultyDataController.DeleteFaculty(facultyId);
+                if (result == 0) return BadRequest(new { Message = "Faculty was not deleted" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }

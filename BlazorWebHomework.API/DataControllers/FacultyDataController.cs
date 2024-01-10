@@ -51,7 +51,20 @@ namespace BlazorWebHomeworkAPI.DataControllers
                     faculty.FacultyNotes,
                 },
                 commandType: CommandType.StoredProcedure);
-            Console.WriteLine("Row: " + row);
+            return row;
+        }
+
+        public int DeleteFaculty(int facultyId) 
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.Execute(
+                DatabaseConstants.DeleteFaculty,
+                new
+                {
+                    facultyId,
+                },
+                commandType: CommandType.StoredProcedure);
             return row;
         }
     }

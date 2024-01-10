@@ -72,6 +72,7 @@
     <Build Include="dbo\Stored Procedures\sp_Departments_GetAllDepartments.sql" />
     <Build Include="dbo\Stored Procedures\sp_Faculties_GetFaculties.sql" />
     <Build Include="dbo\Stored Procedures\sp_Faculties_CreateFaculty.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Faculties_DeleteFaculty.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

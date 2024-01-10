@@ -1,6 +1,7 @@
 ﻿@page "/faculties"
 @inject HttpClient HttpClient
 @inject DialogService DialogService
+@inject NotificationService NotificationService
 @rendermode InteractiveServer
 
 <PageTitle>Факультети</PageTitle>
@@ -37,8 +38,10 @@ else
                     <td class="faculties__data">@faculty.FacultyNotes</td>
                     <td class="faculties__data">
                         <div class="faculties__data-block">
-                            <RadzenButton Click=@(args => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" }))>Edit</RadzenButton>
-                            <RadzenButton id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Delete</RadzenButton>
+                            <RadzenButton>Редагувати</RadzenButton>
+
+                            <RadzenButton Click="(x => ConfirmDelete(faculty.FacultyId))"
+                                    id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Видалити</RadzenButton>
                         </div>
                     </td>
                 </tr>
@@ -53,10 +56,31 @@ else
 </div> *@
 
 @code {
-    List<Faculty>? faculties = null;
+    List<Faculty> faculties = new List<Faculty>();
 
     protected override async Task OnInitializedAsync()
     {
-        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties");
+        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties") ?? new List<Faculty>();
+    }
+
+    async Task ConfirmDelete(int facultyId)
+    {
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
+                                new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        if (IsConfirmed)
+        {
+            var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Faculty/DeleteFaculty?facultyId={facultyId}");
+
+            if (result == 1)
+            {
+                NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, 
+                    Summary = "Успіх!", Detail = "Дані були успішно видалені", Duration = 10000});
+
+                var faculty = faculties.FirstOrDefault(f => f.FacultyId == facultyId);
+
+                if (faculty is not null) faculties.Remove(faculty);
+            }
+        }
     }
 }
