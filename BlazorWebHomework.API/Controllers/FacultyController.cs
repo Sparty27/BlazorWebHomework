@@ -36,5 +36,26 @@ namespace BlazorWebHomeworkAPI.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("CreateFaculty")]
+        public IActionResult CreateStore(Faculty faculty)
+        {
+            try
+            {
+                var result = _facultyDataController.CreateFaculty(faculty);
+                if (result == 0) return BadRequest(new { Message = "Faculty was not created" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }

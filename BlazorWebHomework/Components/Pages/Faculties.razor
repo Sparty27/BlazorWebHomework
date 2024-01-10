@@ -1,11 +1,13 @@
 ﻿@page "/faculties"
 @inject HttpClient HttpClient
+@inject DialogService DialogService
 @rendermode InteractiveServer
 
 <PageTitle>Факультети</PageTitle>
-<h3 class="tracking-widest text-4xl font-bold text-gray-900 dark:text-white mb-[20px]">Факультети</h3>
+<h3 class="tracking-widest text-4xl font-bold text-gray-900 dark:text-white my-[20px]">Факультети</h3>
 
-<RadzenButton Icon="add" Text="Добавити" class="bg-gradient-to-r from-purple-500 to-pink-500 mb-[25px] rounded-[25px]"></RadzenButton>
+<RadzenButton id="add-button-faculty" style="border-radius: 25px;" Icon="add" Text="Добавити" 
+              class="bg-gradient-to-r from-purple-500 to-pink-500 mb-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
 
 @if (faculties == null)
 {
@@ -35,8 +37,8 @@ else
                     <td class="faculties__data">@faculty.FacultyNotes</td>
                     <td class="faculties__data">
                         <div class="faculties__data-block">
-                            <RadzenButton>Edit</RadzenButton>
-                            <RadzenButton>Delete</RadzenButton>
+                            <RadzenButton Click=@(args => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" }))>Edit</RadzenButton>
+                            <RadzenButton id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Delete</RadzenButton>
                         </div>
                     </td>
                 </tr>
@@ -45,14 +47,16 @@ else
     </table>
 }
 
+@* <div class="rz-p-12 rz-text-align-center">
+    <RadzenButton Text="Confirm dialog" ButtonStyle="ButtonStyle.Secondary"
+                  Click=@(args => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
+</div> *@
 
 @code {
     List<Faculty>? faculties = null;
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(HttpClient.BaseAddress);
         faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties");
     }
-
 }

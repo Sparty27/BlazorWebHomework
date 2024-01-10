@@ -38,5 +38,21 @@ namespace BlazorWebHomeworkAPI.DataControllers
                 commandType: CommandType.StoredProcedure);
             return rows;
         }
+
+        public int CreateFaculty(Faculty faculty)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.Execute(
+                DatabaseConstants.CreateFaculty,
+                new
+                {
+                    faculty.FacultyName,
+                    faculty.FacultyNotes,
+                },
+                commandType: CommandType.StoredProcedure);
+            Console.WriteLine("Row: " + row);
+            return row;
+        }
     }
 }

@@ -5,6 +5,7 @@
         #region Faculties
         public const string GetAllFaculties = "sp_Faculties_GetAllFaculties";
         public const string GetFaculties = "sp_Faculties_GetFaculties";
+        public const string CreateFaculty = "sp_Faculties_CreateFaculty";
         #endregion
 
         #region Departments

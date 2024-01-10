@@ -1,6 +1,19 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#add-button-faculty {
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+#delete-button-faculty {
+    --tw-bg-opacity: 1;
+    background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+#delete-button-faculty:hover {
+}
+
 /*
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
