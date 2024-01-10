@@ -1,0 +1,99 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<RadzenTemplateForm Data="@Faculty" Submit="@((Faculty args) => Submit(args))">
+    <RadzenStack>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenLabel Text="Назва факультету" Component="FacultyName" />
+            <RadzenTextBox @bind-Value="Faculty.FacultyName" Placeholder="Введіть назву" Style="width: 100%;" Name="FacultyName"></RadzenTextBox>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenLabel Text="Примітки" Component="FacultyNotes" />
+            <RadzenTextArea @bind-Value="Faculty.FacultyNotes" Placeholder="" Style="width: 100%;" Name="FacultyNotes" class="h-[150px] min-h-[75px] max-h-[400px]"></RadzenTextArea>
+        </RadzenRow>
+    </RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Save" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Cancel" Click="@Cancel"/>
+    </RadzenStack>
+</RadzenTemplateForm>
+
+@* <EditForm Model="Faculty">
+    <div class="form-group">
+        <label for="storeName" class="control-label">Назва факультету:</label>
+        <InputText id="storeName" @bind-Value="Faculty.FacultyName" class="form-control"></InputText>
+    </div>
+    <div class="form-group mt-[25px]">
+        <label for="phone" class="control-label">Примітка:</label>
+        <InputTextArea id="phone" @bind-Value="Faculty.FacultyNotes" class="form-control"></InputTextArea>
+    </div>
+    <div class="form-group flex align-items-center justify-content-center">
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Зберегти" Style="font-size: large" class="mt-[25px]" />
+    </div>
+</EditForm> *@
+
+@code {
+    protected override void OnInitialized()
+    {
+        Faculty.FacultyId = FacultyParameter.FacultyId;
+        Faculty.FacultyName = FacultyParameter.FacultyName;
+        Faculty.FacultyNotes = FacultyParameter.FacultyNotes;
+    }
+    private Faculty Faculty { get; set; } = new();
+
+    [Parameter]
+    public Faculty FacultyParameter { get; set; } = new();
+
+    [Parameter]
+    public List<Faculty>? Faculties { get; set; }
+
+    async Task Submit(Faculty args)
+    {
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете оновити дані?", "Ви впевнені?",
+                        new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        if(IsConfirmed)
+        {
+            var response = await HttpClient.PutAsJsonAsync<Faculty>($"api/Faculty/UpdateFaculty", args);
+
+
+            var result = await response.Content.ReadFromJsonAsync<int>();
+
+            if (result == 1)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно оновлені",
+                        Duration = 5000
+                    });
+
+                var faculty = Faculties?.FirstOrDefault(f => f.FacultyId == args.FacultyId);
+
+                if (faculty is not null)
+                {
+                    faculty.FacultyName = args.FacultyName;
+                    faculty.FacultyNotes = args.FacultyNotes;
+                }
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Помилка!",
+                        Detail = "Дані не були оновленими",
+                        Duration = 10000
+                    });
+            }
+
+            DialogService.Close(true);
+        }
+    }
+
+    void Cancel() => DialogService.Close(false);
+
+}

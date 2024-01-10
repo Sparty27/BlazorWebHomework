@@ -600,12 +600,36 @@ video {
   margin-bottom: 25px;
 }
 
+.mt-\[25px\] {
+  margin-top: 25px;
+}
+
 .flex {
   display: flex;
 }
 
 .table {
   display: table;
+}
+
+.h-\[150px\] {
+  height: 150px;
+}
+
+.max-h-\[600px\] {
+  max-height: 600px;
+}
+
+.max-h-\[500px\] {
+  max-height: 500px;
+}
+
+.max-h-\[400px\] {
+  max-height: 400px;
+}
+
+.min-h-\[75px\] {
+  min-height: 75px;
 }
 
 .rounded-\[25px\] {

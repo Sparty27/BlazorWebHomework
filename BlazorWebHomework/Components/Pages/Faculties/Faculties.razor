@@ -38,7 +38,7 @@ else
                     <td class="faculties__data">@faculty.FacultyNotes</td>
                     <td class="faculties__data">
                         <div class="faculties__data-block">
-                            <RadzenButton>Редагувати</RadzenButton>
+                            <RadzenButton Click="(x => EditFaculty(faculty))">Редагувати</RadzenButton>
 
                             <RadzenButton Click="(x => ConfirmDelete(faculty.FacultyId))"
                                     id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Видалити</RadzenButton>
@@ -50,17 +50,17 @@ else
     </table>
 }
 
-@* <div class="rz-p-12 rz-text-align-center">
-    <RadzenButton Text="Confirm dialog" ButtonStyle="ButtonStyle.Secondary"
-                  Click=@(args => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
-</div> *@
-
 @code {
     List<Faculty> faculties = new List<Faculty>();
 
     protected override async Task OnInitializedAsync()
     {
         faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties") ?? new List<Faculty>();
+    }
+
+    async Task EditFaculty(Faculty faculty)
+    {
+        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} });
     }
 
     async Task ConfirmDelete(int facultyId)
@@ -75,7 +75,7 @@ else
             if (result == 1)
             {
                 NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, 
-                    Summary = "Успіх!", Detail = "Дані були успішно видалені", Duration = 10000});
+                    Summary = "Успіх!", Detail = "Дані були успішно видалені", Duration = 5000});
 
                 var faculty = faculties.FirstOrDefault(f => f.FacultyId == facultyId);
 

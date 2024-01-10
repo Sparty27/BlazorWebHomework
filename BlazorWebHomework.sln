@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebHomework", "BlazorWebHomework\BlazorWebHomework.csproj", "{A8CAF5AA-6033-4B41-ADA2-AF0032C85AF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebHomework", "BlazorWebHomework\BlazorWebHomework.csproj", "{A8CAF5AA-6033-4B41-ADA2-AF0032C85AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebHomework.API", "BlazorWebHomework.API\BlazorWebHomework.API.csproj", "{52C71C4F-5B4E-4957-8C20-F5EE197F70EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebHomework.API", "BlazorWebHomework.API\BlazorWebHomework.API.csproj", "{52C71C4F-5B4E-4957-8C20-F5EE197F70EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebHomework.Models", "BlazorWebHomework.Models\BlazorWebHomework.Models.csproj", "{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebHomework.Models", "BlazorWebHomework.Models\BlazorWebHomework.Models.csproj", "{0B2CFEED-1A7A-445A-B9C2-068CD4289BBD}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BlazorWebHomework.DB", "BlazorWebHomework.DB\BlazorWebHomework.DB.sqlproj", "{431C341B-A85F-4BF9-846F-28C991076F4C}"
 EndProject

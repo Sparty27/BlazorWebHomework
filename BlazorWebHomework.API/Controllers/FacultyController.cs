@@ -78,5 +78,26 @@ namespace BlazorWebHomeworkAPI.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPut("UpdateFaculty")]
+        public IActionResult UpdateFaculty(Faculty faculty)
+        {
+            try
+            {
+                var result = _facultyDataController.UpdateFaculty(faculty);
+                if (result == 0) return BadRequest(new { Message = "Faculty was not updated" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }
