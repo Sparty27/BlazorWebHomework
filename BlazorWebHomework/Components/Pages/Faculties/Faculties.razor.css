@@ -2,8 +2,10 @@
     margin-bottom: 30px;
 }
 
-.faculties__data{
-    vertical-align:middle;
+.faculties__data {
+    vertical-align: middle;
+    word-wrap: break-word; /* Дозволяє переносити слова, якщо вони не поміщаються в рядок */
+    overflow: hidden; /* Обрізає текст, який не поміщається в рядок */
 }
 
 .faculties__data-id {
@@ -27,11 +29,14 @@ th:nth-last-child(2) {
 }
 
 td {
-    border-left: 1px solid rgba(0,0,0,0.2);
-    border-right: 1px solid rgba(0,0,0,0.2);
+    border-left: 1px solid #DEE2E6;
+    border-right: 1px solid #DEE2E6;
 }
 
 * {
     font-family: 'Source Sans 3';
-    font-weight: 500;
+}
+
+.rz-dialog-title {
+    font-weight: 800;
 }

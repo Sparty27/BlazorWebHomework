@@ -5,50 +5,52 @@
 @rendermode InteractiveServer
 
 <PageTitle>Факультети</PageTitle>
-<h3 class="tracking-widest text-4xl font-bold text-gray-900 dark:text-white my-[20px]">Факультети</h3>
+<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm">Факультети</h3>
 
-<RadzenButton id="add-button-faculty" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateFaculty"
-              class="bg-gradient-to-r from-purple-500 to-pink-500 mb-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
+<article class="content px-4">
+    <RadzenButton id="add-button-faculty" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateFaculty"
+                  class="bg-gradient-to-r from-purple-500 to-pink-500 my-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
 
-@if (faculties == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Факультет</th>
-                <th>Примітка</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var faculty in faculties)
-            {
+    @if (faculties == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td class="faculties__data">
-                        <div class="faculties__data-id">
-                            @faculty.FacultyId
-                        </div>
-                    </td>
-                    <td class="faculties__data">@faculty.FacultyName</td>
-                    <td class="faculties__data">@faculty.FacultyNotes</td>
-                    <td class="faculties__data">
-                        <div class="faculties__data-block">
-                            <RadzenButton Click="(x => EditFaculty(faculty))">Редагувати</RadzenButton>
-
-                            <RadzenButton Click="(x => ConfirmDelete(faculty.FacultyId))"
-                                    id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Видалити</RadzenButton>
-                        </div>
-                    </td>
+                    <th><div class="flex justify-content-center">ID</div></th>
+                    <th>Факультет</th>
+                    <th>Примітка</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var faculty in faculties)
+                {
+                    <tr>
+                        <td class="faculties__data min-w-[50px]">
+                            <div class="faculties__data-id font-extrabold ">
+                                @faculty.FacultyId
+                            </div>
+                        </td>
+                        <td class="faculties__data w-1/3">@faculty.FacultyName</td>
+                        <td class="faculties__data w-1/2 max-w-[200px]">@faculty.FacultyNotes</td>
+                        <td class="faculties__data w-1/6">
+                            <div class="faculties__data-block flex justify-content-center">
+                                <RadzenButton Click="(x => EditFaculty(faculty))">Редагувати</RadzenButton>
+
+                                <RadzenButton Click="(x => ConfirmDelete(faculty.FacultyId))"
+                                        id="delete-button-faculty" class="bg-red-500 delete-button-faculty">Видалити</RadzenButton>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</article>
 
 @code {
     List<Faculty> faculties = new List<Faculty>();
@@ -65,7 +67,8 @@ else
 
     async Task EditFaculty(Faculty faculty)
     {
-        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} });
+        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} },
+            new DialogOptions() { AutoFocusFirstElement = false });
     }
 
     async Task ConfirmDelete(int facultyId)

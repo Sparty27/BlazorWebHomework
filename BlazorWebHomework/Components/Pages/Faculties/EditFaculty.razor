@@ -5,18 +5,22 @@
 
 <RadzenTemplateForm Data="@Faculty" Submit="@((Faculty args) => Submit(args))">
     <RadzenStack>
-        <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
             <RadzenLabel Text="Назва факультету" Component="FacultyName" />
-            <RadzenTextBox @bind-Value="Faculty.FacultyName" Placeholder="Введіть назву" Style="width: 100%;" Name="FacultyName"></RadzenTextBox>
+            <div style="width: 100%;display: block;">
+                <RadzenTextBox @bind-Value="Faculty.FacultyName" Placeholder="Введіть назву" Style="width: 100%;display: block;" Name="FacultyName" MaxLength="100"/>
+                <RadzenRequiredValidator Component="FacultyName" Text="Введіть назву факультета" Popup="true" Style="position: absolute" />
+            </div>
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.Center">
             <RadzenLabel Text="Примітки" Component="FacultyNotes" />
-            <RadzenTextArea @bind-Value="Faculty.FacultyNotes" Placeholder="" Style="width: 100%;" Name="FacultyNotes" class="h-[150px] min-h-[75px] max-h-[400px]"></RadzenTextArea>
+            <RadzenTextArea @bind-Value="Faculty.FacultyNotes" Placeholder="" Style="width: 100%;" Name="FacultyNotes" MaxLength="1000" 
+                class="h-[150px] min-h-[75px] max-h-[400px]"></RadzenTextArea>
         </RadzenRow>
     </RadzenStack>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
-        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Save" />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Cancel" Click="@Cancel"/>
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Зберегти" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Скасувати" Click="@Cancel"/>
     </RadzenStack>
 </RadzenTemplateForm>
 
