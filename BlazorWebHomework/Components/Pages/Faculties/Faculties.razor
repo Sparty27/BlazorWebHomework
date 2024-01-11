@@ -7,7 +7,7 @@
 <PageTitle>Факультети</PageTitle>
 <h3 class="tracking-widest text-4xl font-bold text-gray-900 dark:text-white my-[20px]">Факультети</h3>
 
-<RadzenButton id="add-button-faculty" style="border-radius: 25px;" Icon="add" Text="Добавити" 
+<RadzenButton id="add-button-faculty" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateFaculty"
               class="bg-gradient-to-r from-purple-500 to-pink-500 mb-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
 
 @if (faculties == null)
@@ -58,9 +58,14 @@ else
         faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties") ?? new List<Faculty>();
     }
 
+    async Task CreateFaculty()
+    {
+        var response = await DialogService.OpenAsync<CreateFaculty>("Добавити факультет", new Dictionary<string, object> { { "Faculties", faculties } });
+    }
+
     async Task EditFaculty(Faculty faculty)
     {
-        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} });
+        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} });
     }
 
     async Task ConfirmDelete(int facultyId)

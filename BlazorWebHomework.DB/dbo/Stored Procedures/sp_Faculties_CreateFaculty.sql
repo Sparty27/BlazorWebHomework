@@ -3,4 +3,4 @@
   @facultynotes text
 AS
   INSERT INTO Faculties VALUES (@facultyname, @facultynotes);
-RETURN @@rowcount
+SELECT SCOPE_IDENTITY();

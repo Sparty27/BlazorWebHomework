@@ -22,8 +22,30 @@ namespace BlazorWebHomeworkAPI.Controllers
         {
             try
             {
-                var categories = _facultyDataController.GetFaculties();
-                return Ok(categories);
+                var faculties = _facultyDataController.GetFaculties();
+                return Ok(faculties);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("GetFacultyById")]
+        public IActionResult GetFacultyById(int id)
+        {
+            try
+            {
+                var faculty = _facultyDataController.GetFacultyById(id);
+
+                if (faculty == null) return BadRequest("Error, object was not found");
+                return Ok(faculty);
             }
             catch (SqlException ex)
             {
@@ -58,13 +80,13 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
         }
 
-        [HttpDelete("DeleteFaculty")]
-        public IActionResult DeleteFaculty(int facultyId)
+        [HttpPut("UpdateFaculty")]
+        public IActionResult UpdateFaculty(Faculty faculty)
         {
             try
             {
-                var result = _facultyDataController.DeleteFaculty(facultyId);
-                if (result == 0) return BadRequest(new { Message = "Faculty was not deleted" });
+                var result = _facultyDataController.UpdateFaculty(faculty);
+                if (result == 0) return BadRequest(new { Message = "Faculty was not updated" });
                 return Ok(result);
             }
             catch (SqlException ex)
@@ -79,13 +101,13 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
         }
 
-        [HttpPut("UpdateFaculty")]
-        public IActionResult UpdateFaculty(Faculty faculty)
+        [HttpDelete("DeleteFaculty")]
+        public IActionResult DeleteFaculty(int facultyId)
         {
             try
             {
-                var result = _facultyDataController.UpdateFaculty(faculty);
-                if (result == 0) return BadRequest(new { Message = "Faculty was not updated" });
+                var result = _facultyDataController.DeleteFaculty(facultyId);
+                if (result == 0) return BadRequest(new { Message = "Faculty was not deleted" });
                 return Ok(result);
             }
             catch (SqlException ex)

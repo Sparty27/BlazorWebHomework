@@ -39,11 +39,27 @@ namespace BlazorWebHomeworkAPI.DataControllers
             return rows;
         }
 
-        public int CreateFaculty(Faculty faculty)
+
+        public Faculty? GetFacultyById(int facultyId)
         {
             using var connection = GetConnection();
             connection.Open();
-            var row = connection.Execute(
+
+            var rows = connection.QueryFirstOrDefault<Faculty>(
+                DatabaseConstants.GetFacultyById,
+                new
+                {
+                    facultyId
+                },
+                commandType: CommandType.StoredProcedure);
+            return rows;
+        }
+
+        public int? CreateFaculty(Faculty faculty)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.QueryFirstOrDefault<int>(
                 DatabaseConstants.CreateFaculty,
                 new
                 {

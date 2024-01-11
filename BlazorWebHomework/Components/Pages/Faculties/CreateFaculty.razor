@@ -1,0 +1,75 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<RadzenTemplateForm Data="@Faculty" Submit="@((Faculty args) => Submit(args))">
+    <RadzenStack>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenLabel Text="Назва факультету" Component="FacultyName" />
+            <RadzenTextBox @bind-Value="Faculty.FacultyName" Placeholder="Введіть назву" Style="width: 100%;" Name="FacultyName"></RadzenTextBox>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center">
+            <RadzenLabel Text="Примітки" Component="FacultyNotes" />
+            <RadzenTextArea @bind-Value="Faculty.FacultyNotes" Placeholder="" Style="width: 100%;" Name="FacultyNotes" class="h-[150px] min-h-[75px] max-h-[400px]"></RadzenTextArea>
+        </RadzenRow>
+    </RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Save" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Cancel" Click="@Cancel" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
+@code {
+    protected override void OnInitialized()
+    {
+    }
+
+    private Faculty Faculty { get; set; } = new();
+
+    [Parameter]
+    public List<Faculty>? Faculties { get; set; }
+
+    async Task Submit(Faculty args)
+    {
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете добавити дані?", "Ви впевнені?",
+                        new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        if (IsConfirmed)
+        {
+            var response = await HttpClient.PostAsJsonAsync<Faculty>($"api/Faculty/CreateFaculty", args);
+
+
+            var result = await response.Content.ReadFromJsonAsync<int>();
+
+            if (result > 0)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно додані",
+                        Duration = 5000
+                    });
+
+                var addedFaculty = await HttpClient.GetFromJsonAsync<Faculty>($"api/Faculty/GetFacultyById?id={result}");
+                if (addedFaculty is not null) Faculties?.Add(addedFaculty);
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Помилка!",
+                        Detail = "Дані не були додані",
+                        Duration = 10000
+                    });
+            }
+
+            DialogService.Close(true);
+        }
+    }
+
+    void Cancel() => DialogService.Close(false);
+
+}
