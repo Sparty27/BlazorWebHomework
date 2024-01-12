@@ -80,5 +80,7 @@
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />
     <None Include="dbo\PostDeployment\Script.PostDeployment_Groups.sql" />
     <None Include="dbo\PostDeployment\Script.PostDeployment_Faculties.sql" />
+    <None Include="dbo\PostDeployment\Script.PostDeployment_Departments.sql" />
+    <None Include="dbo\PostDeployment\Script.PostDeployment_Students.sql" />
   </ItemGroup>
 </Project>

@@ -29,5 +29,5 @@ BEGIN
 			Андрійчук Олександр Валентинович
 			Телефон: +38 (0332) 26-17-10
 			Е-mail: fabd@lntu.edu.ua');
-	SET IDENTITY_INSERT [dbo].[Faculties] ON;
+	SET IDENTITY_INSERT [dbo].[Faculties] OFF;
 END
