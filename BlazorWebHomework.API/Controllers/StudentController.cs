@@ -37,6 +37,68 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
         }
 
+        [HttpGet("GetStudentById")]
+        public IActionResult GetStudentById(int studentId)
+        {
+            try
+            {
+                var student = _studentDataController.GetStudentById(studentId);
+                return Ok(student);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("CreateStudent")]
+        public IActionResult CreateStore(Student student)
+        {
+            try
+            {
+                var result = _studentDataController.CreateStudent(student);
+                if (result == 0) return BadRequest(new { Message = "Student was not created" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("DeleteStudent")]
+        public IActionResult DeleteStudent(int studentId)
+        {
+            try
+            {
+                var result = _studentDataController.DeleteStudent(studentId);
+                if (result == 0) return BadRequest(new { Message = "Student was not deleted" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
         //[HttpGet("GetFaculties")]
         //public IActionResult GetFaculties()
         //{

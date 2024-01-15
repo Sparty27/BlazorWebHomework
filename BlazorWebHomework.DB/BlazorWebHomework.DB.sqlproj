@@ -78,6 +78,9 @@
     <Build Include="dbo\Stored Procedures\sp_Faculties_GetAllFacultiesWithDepartments.sql" />
     <Build Include="dbo\Stored Procedures\sp_Students_GetAllStudents.sql" />
     <Build Include="dbo\Stored Procedures\sp_Groups_GetAllGroups.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Students_CreateStudent.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Students_GetStudentById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Students_DeleteStudent.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

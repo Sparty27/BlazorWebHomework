@@ -1,6 +1,7 @@
 ﻿@inject DialogService DialogService
 @inject HttpClient HttpClient
 @inject NotificationService NotificationService
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <RadzenTemplateForm Data="@Student" Submit="@((Student args) => Submit(args))">
@@ -8,14 +9,14 @@
         <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
             <RadzenLabel Text="Ім'я студента" Component="StudentFirstName" />
             <div style="width: 100%;display: block;">
-                <RadzenTextBox @bind-Value="Student.StudentFirstName" Placeholder="Введіть ім'я" Style="width: 100%;display: block;" Name="StudentFirstName" MaxLength="100" />
+                <RadzenTextBox @bind-Value="Student.StudentFirstName" Placeholder="Введіть ім'я" Style="width: 100%;display: block;" Name="StudentFirstName" MaxLength="50" />
                 <RadzenRequiredValidator Component="StudentFirstName" Text="Введіть ім'я студента" Popup="true" Style="position: absolute" />
             </div>
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
             <RadzenLabel Text="Прізвище студента" Component="StudentLastName" />
             <div style="width: 100%;display: block;">
-                <RadzenTextBox @bind-Value="Student.StudentLastName" Placeholder="Введіть прізвище" Style="width: 100%;display: block;" Name="StudentLastName" MaxLength="100" />
+                <RadzenTextBox @bind-Value="Student.StudentLastName" Placeholder="Введіть прізвище" Style="width: 100%;display: block;" Name="StudentLastName" MaxLength="50" />
                 <RadzenRequiredValidator Component="StudentLastName" Text="Введіть прізвище студента" Popup="true" Style="position: absolute" />
             </div>
         </RadzenRow>
@@ -88,48 +89,47 @@
 
     async Task Submit(Student args)
     {
-        Console.WriteLine(args.StudentFirstName);
-        Console.WriteLine(args.StudentLastName);
-        Console.WriteLine(args.StudentAvgScore);
-        Console.WriteLine(args.StudentRegistrationDate.ToShortDateString());
-        Console.WriteLine(args.StudentGroupId);
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете добавити дані?", "Ви впевнені?",
+                new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
 
-        // bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете добавити дані?", "Ви впевнені?",
-        //                 new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
-
-        // if (IsConfirmed)
-        // {
-        //     var response = await HttpClient.PostAsJsonAsync<Faculty>($"api/Faculty/CreateFaculty", args);
+        if (IsConfirmed)
+        {
+            var response = await HttpClient.PostAsJsonAsync<Student>($"api/Student/CreateStudent", args);
 
 
-        //     var result = await response.Content.ReadFromJsonAsync<int>();
+            var result = await response.Content.ReadFromJsonAsync<int>();
 
-        //     if (result > 0)
-        //     {
-        //         NotificationService.Notify(new NotificationMessage
-        //             {
-        //                 Severity = NotificationSeverity.Success,
-        //                 Summary = "Успіх!",
-        //                 Detail = "Дані були успішно додані",
-        //                 Duration = 5000
-        //             });
+            if (result > 0)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно додані",
+                        Duration = 5000
+                    });
 
-        //         var addedFaculty = await HttpClient.GetFromJsonAsync<Faculty>($"api/Faculty/GetFacultyById?id={result}");
-        //         if (addedFaculty is not null) Faculties?.Add(addedFaculty);
-        //     }
-        //     else
-        //     {
-        //         NotificationService.Notify(new NotificationMessage
-        //             {
-        //                 Severity = NotificationSeverity.Error,
-        //                 Summary = "Помилка!",
-        //                 Detail = "Дані не були додані",
-        //                 Duration = 10000
-        //             });
-        //     }
+                var addedStudent = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentById?studentId={result}");
+                if (addedStudent is not null) 
+                {
+                    Students?.Add(addedStudent);
 
-        //     DialogService.Close(true);
-        // }
+                    Navigation.NavigateTo("/students", true);
+                }
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Помилка!",
+                        Detail = "Дані не були додані",
+                        Duration = 10000
+                    });
+            }
+
+            DialogService.Close(true);
+        }
     }
 
     void Cancel() => DialogService.Close(false);

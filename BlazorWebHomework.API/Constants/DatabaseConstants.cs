@@ -18,6 +18,10 @@
 
         #region Students
         public const string GetAllStudents = "sp_Students_GetAllStudents";
+        public const string GetStudentById = "sp_Students_GetStudentById";
+        public const string CreateStudent = "sp_Students_CreateStudent";
+        public const string UpdateStudent = "sp_Students_UpdateStudent";
+        public const string DeleteStudent = "sp_Students_DeleteStudent";
         #endregion
 
         #region Groups
