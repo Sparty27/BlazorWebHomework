@@ -586,6 +586,14 @@ video {
   position: absolute;
 }
 
+.relative {
+  position: relative;
+}
+
+.left-0 {
+  left: 0px;
+}
+
 .my-5 {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
@@ -606,6 +614,18 @@ video {
 
 .mt-\[25px\] {
   margin-top: 25px;
+}
+
+.ml-\[100px\] {
+  margin-left: 100px;
+}
+
+.ml-\[50px\] {
+  margin-left: 50px;
+}
+
+.mr-\[50px\] {
+  margin-right: 50px;
 }
 
 .block {
@@ -640,6 +660,10 @@ video {
   width: 33.333333%;
 }
 
+.w-1\/5 {
+  width: 20%;
+}
+
 .w-1\/6 {
   width: 16.666667%;
 }
@@ -650,6 +674,14 @@ video {
 
 .max-w-\[200px\] {
   max-width: 200px;
+}
+
+.\!items-center {
+  align-items: center !important;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .rounded-\[25px\] {
@@ -731,7 +763,7 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-#add-button-faculty {
+#add-button {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
@@ -744,8 +776,33 @@ video {
 #delete-button-faculty:hover {
 }
 
+#delete-button-student {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+#delete-button-faculty:hover {
+}
+
 * {
   font-family: 'Source Sans 3';
+}
+
+td {
+  border-left: 1px solid #DEE2E6;
+  border-right: 1px solid #DEE2E6;
+}
+
+th {
+  border: 1px solid rgb(133, 133, 133)
+}
+
+th:last-child {
+  border-left: none;
+}
+
+th:nth-last-child(2) {
+  border-right: none;
 }
 
 /*

@@ -1,0 +1,137 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<RadzenTemplateForm Data="@Student" Submit="@((Student args) => Submit(args))">
+    <RadzenStack>
+        <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
+            <RadzenLabel Text="Ім'я студента" Component="StudentFirstName" />
+            <div style="width: 100%;display: block;">
+                <RadzenTextBox @bind-Value="Student.StudentFirstName" Placeholder="Введіть ім'я" Style="width: 100%;display: block;" Name="StudentFirstName" MaxLength="100" />
+                <RadzenRequiredValidator Component="StudentFirstName" Text="Введіть ім'я студента" Popup="true" Style="position: absolute" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
+            <RadzenLabel Text="Прізвище студента" Component="StudentLastName" />
+            <div style="width: 100%;display: block;">
+                <RadzenTextBox @bind-Value="Student.StudentLastName" Placeholder="Введіть прізвище" Style="width: 100%;display: block;" Name="StudentLastName" MaxLength="100" />
+                <RadzenRequiredValidator Component="StudentLastName" Text="Введіть прізвище студента" Popup="true" Style="position: absolute" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+            <div class="ml-[50px]">
+                <RadzenLabel Text="Середній бал" Component="StudentAvgScore" />
+            </div>
+
+            <div class="rz-text-align-center mr-[50px] relative">
+                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;"
+                                Placeholder="Введіть середній бал" Name="StudentAvgScore" Min="1" Max="100" Format="0.00"/>
+                <RadzenRequiredValidator Component="StudentAvgScore" Text="Введіть середній бал" Popup="true" Style="position: absolute;" />
+                <RadzenNumericRangeValidator Component="StudentAvgScore" Min="1" Max="100" Text="Значення може бути від 1 до 100" Popup="true" Style="position:absolute;left:0px;"/>
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+            <div class="ml-[50px]">
+                <RadzenLabel Text="Дата реєстрації" Component="DatePickerBindValue"/>
+            </div>
+
+            <div class="mr-[50px]">
+                <RadzenDatePicker @bind-Value="Student.StudentRegistrationDate" Name="DatePickerBindValue" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="max-width:197px;display:block;"/>
+                <RadzenRequiredValidator Component="DatePickerBindValue" Text="Виберіть дату реєстрації" Popup="true" Style="position: absolute" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+             <div class="ml-[50px]">
+                 <RadzenLabel Text="Група" Component="DropDownDataGridBindValue" />
+             </div>
+
+            <div class="mr-[50px]">
+                 <RadzenDropDownDataGrid @bind-Value="Student.StudentGroupId" TextProperty="GroupName" ValueProperty="GroupId" Data=@Groups 
+                                         Style="max-width:197px;width:100%;display:block;" Name="DropDownDataGridBindValue">
+                     <Columns>
+                         <RadzenDropDownDataGridColumn Property="GroupName" Title="Назва групи" Width="200px" />
+                     </Columns>
+                </RadzenDropDownDataGrid>
+                 <RadzenCompareValidator Value="@targetValue" Component="DropDownDataGridBindValue"
+                                         Text="Виберіть групу" Popup=true Style="position: absolute" Operator=@compareOperator />
+            </div>
+
+        </RadzenRow>
+    </RadzenStack>
+
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Зберегти" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Скасувати" Click="@Cancel" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
+ @code {
+    protected override async Task OnInitializedAsync()
+    {
+        Groups = await HttpClient.GetFromJsonAsync<List<Group>>("api/Group/GetAllGroups")  ?? new List<Group>();
+
+        Groups = Groups.OrderBy(g => g.GroupName).ToList();
+    }
+
+    private Student Student { get; set; } = new();
+
+    private IEnumerable<Group>? GroupData;
+    private List<Group>? Groups { get; set; }
+
+    [Parameter]
+    public List<StudentViewModel>? Students { get; set; }
+
+
+    int targetValue = 0;
+    CompareOperator compareOperator = CompareOperator.NotEqual;
+
+    async Task Submit(Student args)
+    {
+        Console.WriteLine(args.StudentFirstName);
+        Console.WriteLine(args.StudentLastName);
+        Console.WriteLine(args.StudentAvgScore);
+        Console.WriteLine(args.StudentRegistrationDate.ToShortDateString());
+        Console.WriteLine(args.StudentGroupId);
+
+        // bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете добавити дані?", "Ви впевнені?",
+        //                 new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        // if (IsConfirmed)
+        // {
+        //     var response = await HttpClient.PostAsJsonAsync<Faculty>($"api/Faculty/CreateFaculty", args);
+
+
+        //     var result = await response.Content.ReadFromJsonAsync<int>();
+
+        //     if (result > 0)
+        //     {
+        //         NotificationService.Notify(new NotificationMessage
+        //             {
+        //                 Severity = NotificationSeverity.Success,
+        //                 Summary = "Успіх!",
+        //                 Detail = "Дані були успішно додані",
+        //                 Duration = 5000
+        //             });
+
+        //         var addedFaculty = await HttpClient.GetFromJsonAsync<Faculty>($"api/Faculty/GetFacultyById?id={result}");
+        //         if (addedFaculty is not null) Faculties?.Add(addedFaculty);
+        //     }
+        //     else
+        //     {
+        //         NotificationService.Notify(new NotificationMessage
+        //             {
+        //                 Severity = NotificationSeverity.Error,
+        //                 Summary = "Помилка!",
+        //                 Detail = "Дані не були додані",
+        //                 Duration = 10000
+        //             });
+        //     }
+
+        //     DialogService.Close(true);
+        // }
+    }
+
+    void Cancel() => DialogService.Close(false);
+
+}

@@ -1,27 +1,19 @@
-﻿.faculties__header {
+﻿.students__header {
     margin-bottom: 30px;
 }
 
-.faculties__data {
+.students__data {
     vertical-align: middle;
     word-wrap: break-word; /* Дозволяє переносити слова, якщо вони не поміщаються в рядок */
     overflow: hidden; /* Обрізає текст, який не поміщається в рядок */
 }
 
-.faculties__data-id {
+.students__data-id {
     display: flex;
     justify-content: space-around;
 }
 
-.faculties__data-block {
+.students__data-block {
     display: flex;
     gap: 10px;
-}
-
-* {
-    font-family: 'Source Sans 3';
-}
-
-.rz-dialog-title {
-    font-weight: 800;
 }

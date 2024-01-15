@@ -17,6 +17,26 @@ namespace BlazorWebHomeworkAPI.Controllers
             _facultyDataController = new FacultyDataController(configuration);
         }
 
+        [HttpGet("GetAllFaculties")]
+        public IActionResult GetAllFacultiesWithDepartments()
+        {
+            try
+            {
+                var faculties = _facultyDataController.GetAllFacultiesWithDepartments();
+                return Ok(faculties);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
         [HttpGet("GetFaculties")]
         public IActionResult GetFaculties()
         {
