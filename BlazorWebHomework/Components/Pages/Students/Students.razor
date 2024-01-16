@@ -75,7 +75,8 @@
 
     async Task EditStudent(StudentViewModel student)
     {
-      
+        var response = await DialogService.OpenAsync<EditStudent>("Редагувати студента", new Dictionary<string, object> { { "StudentParameter", student }, { "Students", students } },
+                                                new DialogOptions() { AutoFocusFirstElement = false });
     }
 
     async Task ConfirmDelete(int studentId)
@@ -87,7 +88,9 @@
         {
             var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Student/DeleteStudent?studentId={studentId}");
 
-            if (result == 1)
+            Console.WriteLine("Value: " + result);
+
+            if (result > 1)
             {
                 NotificationService.Notify(new NotificationMessage
                 {

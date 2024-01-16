@@ -2,4 +2,4 @@
 	@facultyId int
 AS
 	DELETE FROM Faculties WHERE Faculties.FacultyId = @facultyId
-RETURN @@ROWCOUNT
+RETURN 1

@@ -77,7 +77,6 @@
 
     private Student Student { get; set; } = new();
 
-    private IEnumerable<Group>? GroupData;
     private List<Group>? Groups { get; set; }
 
     [Parameter]
@@ -94,6 +93,7 @@
 
         if (IsConfirmed)
         {
+            args.StudentAvgScore = Math.Round(args.StudentAvgScore, 2);
             var response = await HttpClient.PostAsJsonAsync<Student>($"api/Student/CreateStudent", args);
 
 
@@ -109,7 +109,7 @@
                         Duration = 5000
                     });
 
-                var addedStudent = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentById?studentId={result}");
+                var addedStudent = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentViewModelById?studentId={result}");
                 if (addedStudent is not null) 
                 {
                     Students?.Add(addedStudent);

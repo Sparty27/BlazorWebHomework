@@ -2,5 +2,5 @@
 	@studentId int
 AS
 	DELETE FROM Students WHERE Students.StudentId = @studentId
-RETURN @@ROWCOUNT
+RETURN 1
 

@@ -28,11 +28,11 @@ namespace BlazorWebHomeworkAPI.DataControllers
             return rows;
         }
 
-        public StudentViewModel? GetStudentById(int studentId)
+        public Student? GetStudentById(int studentId)
         {
             using var connection = GetConnection();
             connection.Open();
-            var row = connection.QueryFirstOrDefault<StudentViewModel>(
+            var row = connection.QueryFirstOrDefault<Student>(
                 DatabaseConstants.GetStudentById,
                 new
                 {
@@ -40,7 +40,20 @@ namespace BlazorWebHomeworkAPI.DataControllers
                 },
                 commandType: CommandType.StoredProcedure);
             return row;
+        }
 
+        public StudentViewModel? GetStudentViewModelById(int studentId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.QueryFirstOrDefault<StudentViewModel>(
+                DatabaseConstants.GetStudentViewModelById,
+                new
+                {
+                    studentId
+                },
+                commandType: CommandType.StoredProcedure);
+            return row;
         }
 
         public int? CreateStudent(Student student)
@@ -51,6 +64,25 @@ namespace BlazorWebHomeworkAPI.DataControllers
                 DatabaseConstants.CreateStudent,
                 new
                 {
+                    student.StudentFirstName,
+                    student.StudentLastName,
+                    student.StudentGroupId,
+                    student.StudentAvgScore,
+                    student.StudentRegistrationDate
+                },
+                commandType: CommandType.StoredProcedure);
+            return row;
+        }
+
+        public int UpdateStudent(Student student)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.Execute(
+                DatabaseConstants.UpdateStudent,
+                new
+                {
+                    student.StudentId,
                     student.StudentFirstName,
                     student.StudentLastName,
                     student.StudentGroupId,

@@ -57,6 +57,26 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
         }
 
+        [HttpGet("GetStudentViewModelById")]
+        public IActionResult GetStudentViewModelById(int studentId)
+        {
+            try
+            {
+                var student = _studentDataController.GetStudentViewModelById(studentId);
+                return Ok(student);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
         [HttpPost("CreateStudent")]
         public IActionResult CreateStore(Student student)
         {
@@ -64,6 +84,27 @@ namespace BlazorWebHomeworkAPI.Controllers
             {
                 var result = _studentDataController.CreateStudent(student);
                 if (result == 0) return BadRequest(new { Message = "Student was not created" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("UpdateStudent")]
+        public IActionResult UpdateStudent(Student student)
+        {
+            try
+            {
+                var result = _studentDataController.UpdateStudent(student);
+                if (result == 0) return BadRequest(new { Message = "Student was not updated" });
                 return Ok(result);
             }
             catch (SqlException ex)

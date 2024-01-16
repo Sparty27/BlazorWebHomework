@@ -1,0 +1,157 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<RadzenTemplateForm Data="@Student" Submit="@((Student args) => Submit(args))">
+    <RadzenStack>
+        <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
+            <RadzenLabel Text="Ім'я студента" Component="StudentFirstName" />
+            <div style="width: 100%;display: block;">
+                <RadzenTextBox @bind-Value="Student.StudentFirstName" Placeholder="Введіть ім'я" Style="width: 100%;display: block;" Name="StudentFirstName" MaxLength="50" />
+                <RadzenRequiredValidator Component="StudentFirstName" Text="Введіть ім'я студента" Popup="true" Style="position: absolute" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
+            <RadzenLabel Text="Прізвище студента" Component="StudentLastName" />
+            <div style="width: 100%;display: block;">
+                <RadzenTextBox @bind-Value="Student.StudentLastName" Placeholder="Введіть прізвище" Style="width: 100%;display: block;" Name="StudentLastName" MaxLength="50" />
+                <RadzenRequiredValidator Component="StudentLastName" Text="Введіть прізвище студента" Popup="true" Style="position: absolute" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+            <div class="ml-[50px]">
+                <RadzenLabel Text="Середній бал" Component="StudentAvgScore" />
+            </div>
+
+            <div class="rz-text-align-center mr-[50px] relative">
+                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;"
+                               Placeholder="Введіть середній бал" Name="StudentAvgScore" Min="1" Max="100" Format="0.00" />
+                <RadzenRequiredValidator Component="StudentAvgScore" Text="Введіть середній бал" Popup="true" Style="position: absolute;" />
+                <RadzenNumericRangeValidator Component="StudentAvgScore" Min="1" Max="100" Text="Значення може бути від 1 до 100" Popup="true" Style="position:absolute;left:0px;" />
+            </div>
+        </RadzenRow>
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+            <div class="ml-[50px]">
+                <RadzenLabel Text="Дата реєстрації" Component="DatePickerBindValue" />
+            </div>
+
+            <div class="mr-[50px]">
+                <RadzenDatePicker @bind-Value="Student.StudentRegistrationDate" Name="DatePickerBindValue" ShowCalendarWeek DateFormat="dd.MM.yyyy" Style="max-width:197px;display:block;" />
+                 <RadzenRequiredValidator Component="DatePickerBindValue" Text="Виберіть дату реєстрації" Popup="true" Style="position: absolute" />
+             </div>
+         </RadzenRow>
+         <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" class="mb-[25px]">
+             <div class="ml-[50px]">
+                 <RadzenLabel Text="Група" Component="DropDownDataGridBindValue" />
+             </div>
+
+             <div class="mr-[50px]">
+                 <RadzenDropDownDataGrid @bind-Value="Student.StudentGroupId" TextProperty="GroupName" ValueProperty="GroupId" Data=@Groups
+                                         Style="max-width:197px;width:100%;display:block;" Name="DropDownDataGridBindValue" 
+                                         SearchTextPlaceholder="Пошук..." SelectedItem="@StudentParameter.StudentGroupName" SelectedValue="@Student.StudentGroupId">
+                     <Columns>
+                         <RadzenDropDownDataGridColumn Property="GroupName" Title="Назва групи" Width="200px" />
+                     </Columns>
+                 </RadzenDropDownDataGrid>
+                 <RadzenCompareValidator Value="0" Component="DropDownDataGridBindValue"
+                                         Text="Виберіть групу" Popup=true Style="position: absolute" Operator=CompareOperator.NotEqual />
+             </div>
+
+         </RadzenRow>
+     </RadzenStack>
+
+     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+         <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Text="Зберегти" />
+         <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Text="Скасувати" Click="@Cancel" />
+     </RadzenStack>
+ </RadzenTemplateForm>
+
+ @code {
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var response = await HttpClient.GetFromJsonAsync<Student>($"api/Student/GetStudentById?studentId={StudentParameter.StudentId}");
+
+    //     if (response is not null) Student = response;
+    //     else Navigation.NavigateTo("/404");
+
+    //     Groups = await HttpClient.GetFromJsonAsync<List<Group>>("api/Group/GetAllGroups")  ?? new List<Group>();
+
+    //     Groups = Groups.OrderBy(g => g.GroupName).ToList();
+    // }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await HttpClient.GetFromJsonAsync<Student>($"api/Student/GetStudentById?studentId={StudentParameter.StudentId}");
+
+        if (response is not null) Student = response;
+        else Navigation.NavigateTo("/404");
+
+        Groups = await HttpClient.GetFromJsonAsync<List<Group>>("api/Group/GetAllGroups")  ?? new List<Group>();
+
+        Groups = Groups.OrderBy(g => g.GroupName).ToList();
+    }
+
+    private Student Student { get; set; } = new();
+
+    private List<Group>? Groups { get; set; }
+
+    [Parameter]
+    public StudentViewModel StudentParameter { get; set; } = new();
+
+    [Parameter]
+    public List<StudentViewModel>? Students { get; set; }
+
+    async Task Submit(Student args)
+    {
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете оновити дані?", "Ви впевнені?",
+                        new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        if (IsConfirmed)
+        {
+            args.StudentAvgScore = Math.Round(args.StudentAvgScore, 2);
+            var response = await HttpClient.PutAsJsonAsync<Student>($"api/Student/UpdateStudent", args);
+
+
+            var result = await response.Content.ReadFromJsonAsync<int>();
+
+            if (result == 1)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно оновлені",
+                        Duration = 5000
+                    });
+
+                var student = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentViewModelById?studentId={args.StudentId}");
+
+                if (student is not null)
+                {
+                    StudentParameter.StudentFirstName = student.StudentFirstName;
+                    StudentParameter.StudentLastName = student.StudentLastName;
+                    StudentParameter.StudentGroupName = student.StudentGroupName;
+                    StudentParameter.StudentAvgScore = student.StudentAvgScore;
+                    StudentParameter.StudentRegistrationDate = student.StudentRegistrationDate;
+                }
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Помилка!",
+                        Detail = "Дані не були оновленими",
+                        Duration = 10000
+                    });
+            }
+
+            DialogService.Close(true);
+        }
+    }
+
+    void Cancel() => DialogService.Close(false);
+
+}
