@@ -5,6 +5,7 @@ AS
 BEGIN
     DECLARE @numOfStudents AS INT;
     DECLARE @StudentGroupId AS INT;
+    DECLARE @avgScoreOfStudents AS FLOAT;
 
     -- Get the affected StudentGroupId based on the operation
     IF EXISTS (SELECT 1 FROM INSERTED)
@@ -19,7 +20,15 @@ BEGIN
         WHERE StudentGroupId = @StudentGroupId
     );
 
+    SET @avgScoreOfStudents = ROUND((
+        SELECT AVG(StudentAvgScore)
+        FROM Students
+        WHERE StudentGroupId = @StudentGroupId
+    ), 2);
+        
+
     UPDATE Groups
-    SET GroupNumStudents = @numOfStudents
+    SET GroupNumStudents = @numOfStudents,
+        GroupAvgScore = @avgScoreOfStudents
     WHERE GroupId = @StudentGroupId;
 END;
