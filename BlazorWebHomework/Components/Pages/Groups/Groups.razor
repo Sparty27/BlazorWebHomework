@@ -18,7 +18,7 @@
     }
     else
     {
-        <table class="table min-h-[450px]">
+        <table class="table">
             <thead>
                 <tr>
                     <th><div class="flex justify-content-center">ID</div></th>
@@ -33,15 +33,15 @@
                 @foreach (var group in groups)
                 {
                     <tr>
-                        <td class="groups__data min-w-[50px]">
+                        <td class="groups__data min-w-[50px] max-w-[50px] w-[50px]">
                             <div class="groups__data-id font-extrabold ">
                                 @group.GroupId
                             </div>
                         </td>
-                        <td class="groups__data w-1/5">@group.GroupName</td>
-                        <td class="groups__data w-1/5">@group.GroupFacultyName</td>
-                        <td class="groups__data w-1/5">@group.GroupNumStudents</td>
-                        <td class="groups__data w-1/5">@group.GroupAvgScore</td>
+                        <td class="groups__data w-[175px]">@group.GroupName</td>
+                        <td class="groups__data max-w-[750px]" style="word-break:break-word">@group.GroupFacultyName</td>
+                        <td class="groups__data w-[175px]">@group.GroupNumStudents</td>
+                        <td class="groups__data w-[175px]">@group.GroupAvgScore</td>
                         <td class="groups__data w-1/6">
                             <div class="groups__data-block flex justify-content-center">
                                 <RadzenButton Click="(x => EditGroup(group))">Редагувати</RadzenButton>
@@ -64,16 +64,18 @@
     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
     int pageSize = 5;
     int count;
+    int skip = 0;
 
     protected override async Task OnInitializedAsync()
     {
         count = await HttpClient.GetFromJsonAsync<int?>("api/Group/GetCount") ?? 0;
 
-        groups = await GetGroups(0, pageSize);
+        groups = await GetGroups(skip, pageSize);
     }
 
     async Task PageChanged(PagerEventArgs args)
     {
+        skip = args.Skip;
         groups = await GetGroups(args.Skip, args.Top)!;
     }
 
@@ -86,7 +88,7 @@
 
     async Task CreateGroup()
     {
-        // var response = await DialogService.OpenAsync<CreateFaculty>("Добавити факультет", new Dictionary<string, object> { { "Faculties", faculties } });
+        var response = await DialogService.OpenAsync<CreateGroup>("Добавити групу", new Dictionary<string, object> { { "Groups", groups } });
     }
 
     async Task EditGroup(Group Group)
@@ -97,27 +99,25 @@
 
     async Task ConfirmDelete(int groupId)
     {
-        // bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
-        //                         new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
+                                new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
 
-        // if (IsConfirmed)
-        // {
-        //     var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Faculty/DeleteFaculty?facultyId={facultyId}");
+        if (IsConfirmed)
+        {
+            var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Group/DeleteGroup?groupId={groupId}");
 
-        //     if (result == 1)
-        //     {
-        //         NotificationService.Notify(new NotificationMessage
-        //             {
-        //                 Severity = NotificationSeverity.Success,
-        //                 Summary = "Успіх!",
-        //                 Detail = "Дані були успішно видалені",
-        //                 Duration = 5000
-        //             });
+            if (result == 1)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно видалені",
+                        Duration = 5000
+                    });
 
-        //         var faculty = faculties.FirstOrDefault(f => f.FacultyId == facultyId);
-
-        //         if (faculty is not null) faculties.Remove(faculty);
-        //     }
-        // }
+                groups = await GetGroups(skip, pageSize);
+            }
+        }
     }
 }

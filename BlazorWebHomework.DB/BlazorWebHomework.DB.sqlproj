@@ -89,6 +89,7 @@
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetCount.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetAllGroups.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetGroups.sql" />
+    <Build Include="dbo\Stored Procedures\Groups\sp_Groups_DeleteGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

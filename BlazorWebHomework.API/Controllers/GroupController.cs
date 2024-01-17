@@ -75,5 +75,26 @@ namespace BlazorWebHomework.API.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpDelete("DeleteGroup")]
+        public IActionResult DeleteGroup(int groupId)
+        {
+            try
+            {
+                var result = _groupDataController.DeleteGroup(groupId);
+                if (result == 0) return BadRequest(new { Message = "Group was not deleted" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }

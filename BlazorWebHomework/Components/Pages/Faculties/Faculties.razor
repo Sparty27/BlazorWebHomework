@@ -35,8 +35,8 @@
                                 @faculty.FacultyId
                             </div>
                         </td>
-                        <td class="faculties__data w-1/3">@faculty.FacultyName</td>
-                        <td class="faculties__data w-1/2 max-w-[200px]">@faculty.FacultyNotes</td>
+                        <td class="faculties__data max-w-[750px]" style="word-break:break-word">@faculty.FacultyName</td>
+                        <td class="faculties__data max-w-[200px]">@faculty.FacultyNotes</td>
                         <td class="faculties__data w-1/6">
                             <div class="faculties__data-block flex justify-content-center">
                                 <RadzenButton Click="(x => EditFaculty(faculty))">Редагувати</RadzenButton>

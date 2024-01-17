@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using MINT_WebAPI.Constants;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks.Dataflow;
 
 namespace BlazorWebHomework.API.DataControllers
 {
@@ -53,6 +54,20 @@ namespace BlazorWebHomework.API.DataControllers
 
             var row = connection.QueryFirstOrDefault<int>(
                 DatabaseConstants.GetCount,
+                commandType: CommandType.StoredProcedure);
+            return row;
+        }
+
+        public int DeleteGroup(int groupId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.Execute(
+                DatabaseConstants.DeleteGroup,
+                new
+                {
+                    groupId,
+                },
                 commandType: CommandType.StoredProcedure);
             return row;
         }

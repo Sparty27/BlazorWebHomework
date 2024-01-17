@@ -6,6 +6,6 @@
     [StudentAvgScore]  FLOAT (53)    NULL,
     [StudentRegistrationDate] DATE NULL, 
     CONSTRAINT [PK_Students] PRIMARY KEY CLUSTERED ([StudentId] ASC),
-    CONSTRAINT [FK_Students_Groups] FOREIGN KEY ([StudentGroupId]) REFERENCES [dbo].[Groups] ([GroupId])
+    CONSTRAINT [FK_Students_Groups] FOREIGN KEY ([StudentGroupId]) REFERENCES [dbo].[Groups] ([GroupId]) ON DELETE SET NULL
 );
 

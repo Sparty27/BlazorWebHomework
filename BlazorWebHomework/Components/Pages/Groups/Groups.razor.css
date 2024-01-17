@@ -5,7 +5,9 @@
 .groups__data {
     vertical-align: middle;
     word-wrap: break-word; /* Дозволяє переносити слова, якщо вони не поміщаються в рядок */
+    overflow-wrap: break-word;
     overflow: hidden; /* Обрізає текст, який не поміщається в рядок */
+    height: 90px;
 }
 
 .groups__data-id {
