@@ -1,0 +1,19 @@
+﻿.groups__header {
+    margin-bottom: 30px;
+}
+
+.groups__data {
+    vertical-align: middle;
+    word-wrap: break-word; /* Дозволяє переносити слова, якщо вони не поміщаються в рядок */
+    overflow: hidden; /* Обрізає текст, який не поміщається в рядок */
+}
+
+.groups__data-id {
+    display: flex;
+    justify-content: space-around;
+}
+
+.groups__data-block {
+    display: flex;
+    gap: 10px;
+}

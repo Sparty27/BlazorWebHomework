@@ -88,8 +88,6 @@
         {
             var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Student/DeleteStudent?studentId={studentId}");
 
-            Console.WriteLine("Value: " + result);
-
             if (result > 1)
             {
                 NotificationService.Notify(new NotificationMessage

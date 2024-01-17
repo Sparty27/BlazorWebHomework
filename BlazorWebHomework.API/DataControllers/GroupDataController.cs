@@ -29,5 +29,32 @@ namespace BlazorWebHomework.API.DataControllers
                 commandType: CommandType.StoredProcedure);
             return rows;
         }
+
+        public IEnumerable<Group> GetGroups(int skip, int take)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var rows = connection.Query<Group>(
+                DatabaseConstants.GetGroups,
+                new
+                {
+                    skip,
+                    take,
+                },
+                commandType: CommandType.StoredProcedure);
+            return rows;
+        }
+
+        public int? GetCount()
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var row = connection.QueryFirstOrDefault<int>(
+                DatabaseConstants.GetCount,
+                commandType: CommandType.StoredProcedure);
+            return row;
+        }
     }
 }

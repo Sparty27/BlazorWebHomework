@@ -27,6 +27,11 @@
 
         #region Groups
         public const string GetAllGroups = "sp_Groups_GetAllGroups";
+        public const string GetGroups = "sp_Groups_GetGroups";
+        public const string GetCount = "sp_Groups_GetCount";
+        public const string CreateGroup = "sp_Groups_CreateGroup";
+        public const string UpdateGroup = "sp_Groups_UpdateGroup";
+        public const string DeleteGroup = "sp_Groups_DeleteGroup";
         #endregion
     }
 }

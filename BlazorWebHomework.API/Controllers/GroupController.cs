@@ -35,5 +35,45 @@ namespace BlazorWebHomework.API.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("GetGroups")]
+        public IActionResult GetGroups(int Skip, int Take)
+        {
+            try
+            {
+                var groups = _groupDataController.GetGroups(Skip, Take);
+                return Ok(groups);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("GetCount")]
+        public IActionResult GetCount()
+        {
+            try
+            {
+                var count = _groupDataController.GetCount();
+                return Ok(count);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }

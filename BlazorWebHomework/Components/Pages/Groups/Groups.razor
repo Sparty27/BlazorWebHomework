@@ -1,0 +1,123 @@
+﻿@page "/groups"
+@inject HttpClient HttpClient
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Групи</PageTitle>
+<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm">Групи</h3>
+
+<article class="content px-4">
+    <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateGroup"
+                  class="bg-gradient-to-r from-purple-500 to-pink-500 my-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
+
+    @if (groups == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table min-h-[450px]">
+            <thead>
+                <tr>
+                    <th><div class="flex justify-content-center">ID</div></th>
+                    <th>Група</th>
+                    <th>Факультет</th>
+                    <th>К-сть студентів</th>
+                    <th>Середній бал групи</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in groups)
+                {
+                    <tr>
+                        <td class="groups__data min-w-[50px]">
+                            <div class="groups__data-id font-extrabold ">
+                                @group.GroupId
+                            </div>
+                        </td>
+                        <td class="groups__data w-1/5">@group.GroupName</td>
+                        <td class="groups__data w-1/5">@group.GroupFacultyName</td>
+                        <td class="groups__data w-1/5">@group.GroupNumStudents</td>
+                        <td class="groups__data w-1/5">@group.GroupAvgScore</td>
+                        <td class="groups__data w-1/6">
+                            <div class="groups__data-block flex justify-content-center">
+                                <RadzenButton Click="(x => EditGroup(group))">Редагувати</RadzenButton>
+
+                                <RadzenButton Click="(x => ConfirmDelete(group.GroupId))"
+                                              id="delete-button" class="bg-red-500">Видалити</RadzenButton>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" 
+                     HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
+    }
+</article>
+
+@code {
+    List<Group> groups = new List<Group>();
+    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
+    int pageSize = 5;
+    int count;
+
+    protected override async Task OnInitializedAsync()
+    {
+        count = await HttpClient.GetFromJsonAsync<int?>("api/Group/GetCount") ?? 0;
+
+        groups = await GetGroups(0, pageSize);
+    }
+
+    async Task PageChanged(PagerEventArgs args)
+    {
+        groups = await GetGroups(args.Skip, args.Top)!;
+    }
+
+    async Task<List<Group>> GetGroups(int skip, int take)
+    {
+        var response = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroups?skip={skip}&take={take}");
+        if (response is null) Navigation.NavigateTo("/404");
+        return response!;
+    }
+
+    async Task CreateGroup()
+    {
+        // var response = await DialogService.OpenAsync<CreateFaculty>("Добавити факультет", new Dictionary<string, object> { { "Faculties", faculties } });
+    }
+
+    async Task EditGroup(Group Group)
+    {
+        // var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties } },
+        //     new DialogOptions() { AutoFocusFirstElement = false });
+    }
+
+    async Task ConfirmDelete(int groupId)
+    {
+        // bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
+        //                         new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        // if (IsConfirmed)
+        // {
+        //     var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Faculty/DeleteFaculty?facultyId={facultyId}");
+
+        //     if (result == 1)
+        //     {
+        //         NotificationService.Notify(new NotificationMessage
+        //             {
+        //                 Severity = NotificationSeverity.Success,
+        //                 Summary = "Успіх!",
+        //                 Detail = "Дані були успішно видалені",
+        //                 Duration = 5000
+        //             });
+
+        //         var faculty = faculties.FirstOrDefault(f => f.FacultyId == facultyId);
+
+        //         if (faculty is not null) faculties.Remove(faculty);
+        //     }
+        // }
+    }
+}
