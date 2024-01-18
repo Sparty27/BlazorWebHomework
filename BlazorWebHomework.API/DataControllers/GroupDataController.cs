@@ -58,6 +58,21 @@ namespace BlazorWebHomework.API.DataControllers
             return row;
         }
 
+        public int? CreateGroup(Group group)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.QueryFirstOrDefault<int>(
+                DatabaseConstants.CreateGroup,
+                new
+                {
+                    group.GroupName,
+                    group.GroupFacultyId,
+                },
+                commandType: CommandType.StoredProcedure);
+            return row;
+        }
+
         public int DeleteGroup(int groupId)
         {
             using var connection = GetConnection();

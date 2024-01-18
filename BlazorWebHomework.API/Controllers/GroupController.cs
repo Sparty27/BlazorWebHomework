@@ -1,4 +1,5 @@
 ﻿using BlazorWebHomework.API.DataControllers;
+using BlazorWebHomework.Models;
 using BlazorWebHomeworkAPI.DataControllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -63,6 +64,27 @@ namespace BlazorWebHomework.API.Controllers
             {
                 var count = _groupDataController.GetCount();
                 return Ok(count);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("CreateGroup")]
+        public IActionResult CreateGroup(Group group)
+        {
+            try
+            {
+                var result = _groupDataController.CreateGroup(group);
+                if (result == 0) return BadRequest(new { Message = "Group was not created" });
+                return Ok(result);
             }
             catch (SqlException ex)
             {

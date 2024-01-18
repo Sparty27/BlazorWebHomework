@@ -48,8 +48,8 @@
              </div>
 
             <div class="mr-[50px]">
-                 <RadzenDropDownDataGrid @bind-Value="Student.StudentGroupId" TextProperty="GroupName" ValueProperty="GroupId" Data=@Groups 
-                                         Style="max-width:197px;width:100%;display:block;" Name="DropDownDataGridBindValue">
+                 <RadzenDropDownDataGrid @bind-Value="Student.StudentGroupId" TextProperty="GroupName" ValueProperty="GroupId" Data=@Groups
+                                         Style="max-width:197px;width:100%;display:block;" Name="DropDownDataGridBindValue" SearchTextPlaceholder="Пошук...">
                      <Columns>
                          <RadzenDropDownDataGridColumn Property="GroupName" Title="Назва групи" Width="200px" />
                      </Columns>
@@ -57,7 +57,6 @@
                  <RadzenCompareValidator Value="@targetValue" Component="DropDownDataGridBindValue"
                                          Text="Виберіть групу" Popup=true Style="position: absolute" Operator=@compareOperator />
             </div>
-
         </RadzenRow>
     </RadzenStack>
 

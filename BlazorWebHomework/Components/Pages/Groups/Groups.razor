@@ -88,7 +88,7 @@
 
     async Task CreateGroup()
     {
-        var response = await DialogService.OpenAsync<CreateGroup>("Добавити групу", new Dictionary<string, object> { { "Groups", groups } });
+        var response = await DialogService.OpenAsync<CreateGroup>("Добавити групу", new Dictionary<string, object> { { "Groups", groups }, { "Skip", skip }, { "Take", pageSize }});
     }
 
     async Task EditGroup(Group Group)

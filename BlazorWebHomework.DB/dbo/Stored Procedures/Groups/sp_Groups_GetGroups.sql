@@ -4,7 +4,7 @@
 AS
 	SELECT GroupId, GroupName, GroupFacultyId, FacultyName AS GroupFacultyName, GroupNumStudents, GroupAvgScore
 	FROM Groups LEFT JOIN Faculties ON Faculties.FacultyId = Groups.GroupFacultyId
-	ORDER BY GroupId
+	ORDER BY GroupFacultyName, GroupName
 	OFFSET @Skip ROWS
 	FETCH NEXT @Take ROWS ONLY;
 RETURN 0
