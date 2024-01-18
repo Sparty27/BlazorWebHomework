@@ -55,27 +55,27 @@
             </tbody>
         </table>
         <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" 
-                     HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
+                HorizontalAlign="HorizontalAlign.Right" Count="pagerProperties.Count" PageSize="pagerProperties.PageSize" PageNumbersCount="5" PageChanged="@PageChanged" />
     }
 </article>
 
 @code {
     List<Group> groups = new List<Group>();
     string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
-    int pageSize = 5;
-    int count;
-    int skip = 0;
+    PagerProperties pagerProperties = new() { PageSize = 5};
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        count = await HttpClient.GetFromJsonAsync<int?>("api/Group/GetCount") ?? 0;
+        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>("api/Group/GetCount") ?? 0;
 
-        groups = await GetGroups(skip, pageSize);
+        groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
     }
 
     async Task PageChanged(PagerEventArgs args)
     {
-        skip = args.Skip;
+        pagerProperties.Skip = args.Skip;
         groups = await GetGroups(args.Skip, args.Top)!;
     }
 
@@ -88,7 +88,8 @@
 
     async Task CreateGroup()
     {
-        var response = await DialogService.OpenAsync<CreateGroup>("Добавити групу", new Dictionary<string, object> { { "Groups", groups }, { "Skip", skip }, { "Take", pageSize }});
+        var response = await DialogService.OpenAsync<CreateGroup>("Добавити групу", new Dictionary<string, object> 
+                        { { "Groups", groups }, { "Skip", pagerProperties.Skip }, { "Take", pagerProperties.PageSize }, { "PagerProperties", pagerProperties }/* , { "Count", count} */ });
     }
 
     async Task EditGroup(Group Group)
@@ -116,7 +117,24 @@
                         Duration = 5000
                     });
 
-                groups = await GetGroups(skip, pageSize);
+                // if ((pagerProperties.Count - pagerProperties.Skip) > pagerProperties.PageSize)
+                // {
+                //     groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+                //     pagerProperties.Count -= 1;
+                // } else
+                //     groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+                //     pagerProperties.Count -= 1;
+
+                if ((pagerProperties.Count - pagerProperties.Skip) == 1)
+                {
+                    groups = await GetGroups((pagerProperties.Skip - pagerProperties.PageSize), pagerProperties.PageSize);
+                    pagerProperties.Count -= 1;
+                }
+                else
+                {
+                    groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+                    pagerProperties.Count -= 1;
+                }
             }
         }
     }

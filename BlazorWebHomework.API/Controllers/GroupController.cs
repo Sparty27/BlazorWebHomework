@@ -57,6 +57,28 @@ namespace BlazorWebHomework.API.Controllers
             }
         }
 
+        [HttpGet("GetGroupByName")]
+        public IActionResult GetGroupByName(string groupName = "groupName")
+        {
+            try
+            {
+                var group = _groupDataController.GetGroupByName(groupName);
+                Console.WriteLine("Controller, Group: " + group);
+                Console.WriteLine("Controller,Is Group NULL: " + (group is null));
+                return Ok(group);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
         [HttpGet("GetCount")]
         public IActionResult GetCount()
         {

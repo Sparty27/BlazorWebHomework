@@ -11,6 +11,8 @@
             <div style="width: 100%;display: block;">
                 <RadzenTextBox @bind-Value="Group.GroupName" Placeholder="Введіть назву" Style="width: 100%;display: block;" Name="GroupName" MaxLength="25" />
                 <RadzenRequiredValidator Component="GroupName" Text="Введіть назву групи" Popup="true" Style="position: absolute" />
+                <RadzenCustomValidator Component="GroupName" Validator="@(() => ValidateGroupNameWrapper(Group.GroupName))" Text="Група з такою назвою вже існує" 
+                    Popup="true" Style="position: absolute" />
             </div>
         </RadzenRow>
         <RadzenRow AlignItems="AlignItems.Center" class="mb-[25px]">
@@ -20,9 +22,9 @@
 
             <div style="width: 100%;display: block;">
                 <RadzenDropDownDataGrid @bind-Value="Group.GroupFacultyId" TextProperty="FacultyName" ValueProperty="FacultyId" Data=@Faculties
-                                        Style="width:100%;display:block;" Name="DropDownDataGridBindValue" SearchTextPlaceholder="Пошук...">
+                                        Style="width:100%;display:block;" Name="DropDownDataGridBindValue" SearchTextPlaceholder="Пошук..." Density="Density.Compact">
                     <Columns>
-                        <RadzenDropDownDataGridColumn Property="FacultyName" Title="Назва факультету" Width="200px" />
+                        <RadzenDropDownDataGridColumn Property="FacultyName" Title="Назва факультету" Width="200px"/>
                     </Columns>
                 </RadzenDropDownDataGrid>
                 <RadzenCompareValidator Value="0" Component="DropDownDataGridBindValue"
@@ -40,12 +42,16 @@
     private Group Group { get; set; } = new();
     private List<Faculty>? Faculties { get; set; }
 
+    [CascadingParameter]
+    public int Count { get; set; }
     [Parameter]
     public int Skip { get; set; }
     [Parameter]
     public int Take { get; set; }
     [Parameter]
     public List<Group>? Groups { get; set; }
+    [Parameter]
+    public PagerProperties? PagerProperties { get; set; }
 
 
 
@@ -81,6 +87,8 @@
                         Duration = 5000
                     });
 
+                if (PagerProperties is not null) 
+                    PagerProperties.Count += 1;
                 Groups?.Clear();
                 var list = await GetGroups(Skip, Take);
                 Groups?.AddRange(list);
@@ -108,5 +116,21 @@
         var response = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroups?skip={skip}&take={take}");
         if (response is null) Navigation.NavigateTo("/404");
         return response!;
+    }
+
+    async Task<bool> ValidateGroupName(string groupName)
+    {
+        if (Groups?.Find(g => g.GroupName == groupName) is not null) return false;
+
+        var group = await HttpClient.GetFromJsonAsync<int>($"api/Group/GetGroupByName?groupName={groupName}");
+        if (group > 0) return false;
+        return true;
+    }
+
+    bool ValidateGroupNameWrapper(string groupName)
+    {
+        var result = Task.Run(() => ValidateGroupName(groupName));
+        result.Wait();
+        return result.Result;
     }
 }

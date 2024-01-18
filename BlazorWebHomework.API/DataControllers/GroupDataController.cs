@@ -47,6 +47,21 @@ namespace BlazorWebHomework.API.DataControllers
             return rows;
         }
 
+        public int? GetGroupByName(string groupName)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.QueryFirstOrDefault<int>(
+                DatabaseConstants.GetGroupByName,
+                new
+                {
+                    groupName
+                },
+                commandType: CommandType.StoredProcedure);
+            Console.WriteLine("DataController, Row: " + row);
+            return row;
+        }
+
         public int? GetCount()
         {
             using var connection = GetConnection();

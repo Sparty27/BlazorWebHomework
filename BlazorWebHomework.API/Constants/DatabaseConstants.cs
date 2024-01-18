@@ -27,6 +27,7 @@
 
         #region Groups
         public const string GetAllGroups = "sp_Groups_GetAllGroups";
+        public const string GetGroupByName = "sp_Groups_GetGroupByName";
         public const string GetGroups = "sp_Groups_GetGroups";
         public const string GetCount = "sp_Groups_GetCount";
         public const string CreateGroup = "sp_Groups_CreateGroup";
