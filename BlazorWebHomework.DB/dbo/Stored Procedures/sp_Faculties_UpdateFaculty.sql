@@ -7,4 +7,4 @@ AS
 	SET FacultyName = @facultyName,
 		FacultyNotes = @facultyNotes
 	WHERE FacultyId = @facultyId
-RETURN @@ROWCOUNT
+RETURN 1

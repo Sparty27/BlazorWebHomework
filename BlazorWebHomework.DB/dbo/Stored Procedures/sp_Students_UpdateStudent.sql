@@ -14,4 +14,4 @@ AS
 		StudentAvgScore = @studentAvgScore,
 		StudentRegistrationDate = @studentRegistrationDate
 	WHERE StudentId = @studentId
-RETURN @@ROWCOUNT
+RETURN 1

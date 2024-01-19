@@ -94,8 +94,8 @@
 
     async Task EditGroup(Group Group)
     {
-        // var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties } },
-        //     new DialogOptions() { AutoFocusFirstElement = false });
+        var response = await DialogService.OpenAsync<EditGroup>("Редагувати групу", new Dictionary<string, object> { { "GroupParameter", Group }, { "Groups", groups }, { "PagerProperties", pagerProperties } },
+            new DialogOptions() { AutoFocusFirstElement = false });
     }
 
     async Task ConfirmDelete(int groupId)

@@ -120,6 +120,27 @@ namespace BlazorWebHomework.API.Controllers
             }
         }
 
+        [HttpPut("UpdateGroup")]
+        public IActionResult UpdateGroup(Group group)
+        {
+            try
+            {
+                var result = _groupDataController.UpdateGroup(group);
+                if (result == 0) return BadRequest(new { Message = "Group was not updated" });
+                return Ok(result);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Problem with database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
+
         [HttpDelete("DeleteGroup")]
         public IActionResult DeleteGroup(int groupId)
         {

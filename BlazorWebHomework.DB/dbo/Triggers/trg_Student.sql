@@ -1,11 +1,11 @@
-﻿CREATE TRIGGER [trg_Student]
-ON [dbo].Students
-AFTER DELETE, INSERT
+﻿CREATE TRIGGER trg_Student
+ON dbo.Students
+AFTER DELETE, INSERT, UPDATE
 AS
 BEGIN
-    DECLARE @numOfStudents AS INT;
-    DECLARE @StudentGroupId AS INT;
-    DECLARE @avgScoreOfStudents AS FLOAT;
+    DECLARE @numOfStudents INT;
+    DECLARE @StudentGroupId INT;
+    DECLARE @avgScoreOfStudents FLOAT;
 
     -- Get the affected StudentGroupId based on the operation
     IF EXISTS (SELECT 1 FROM INSERTED)
@@ -25,7 +25,6 @@ BEGIN
         FROM Students
         WHERE StudentGroupId = @StudentGroupId
     ), 2);
-        
 
     UPDATE Groups
     SET GroupNumStudents = @numOfStudents,

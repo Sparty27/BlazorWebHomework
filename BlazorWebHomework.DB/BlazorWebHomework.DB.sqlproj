@@ -92,6 +92,7 @@
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_DeleteGroup.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_CreateGroup.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetGroupByName.sql" />
+    <Build Include="dbo\Stored Procedures\Groups\sp_Groups_UpdateGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

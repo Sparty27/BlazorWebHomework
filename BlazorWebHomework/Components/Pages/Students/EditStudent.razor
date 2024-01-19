@@ -116,7 +116,7 @@
 
             var result = await response.Content.ReadFromJsonAsync<int>();
 
-            if (result == 1)
+            if (result > 1)
             {
                 NotificationService.Notify(new NotificationMessage
                     {

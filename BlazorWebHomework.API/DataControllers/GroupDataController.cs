@@ -88,6 +88,22 @@ namespace BlazorWebHomework.API.DataControllers
             return row;
         }
 
+        public int UpdateGroup(Group group)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+            var row = connection.Execute(
+                DatabaseConstants.UpdateGroup,
+                new
+                {
+                    group.GroupId,
+                    group.GroupName,
+                    group.GroupFacultyId,
+                },
+                commandType: CommandType.StoredProcedure);
+            return row;
+        }
+
         public int DeleteGroup(int groupId)
         {
             using var connection = GetConnection();
