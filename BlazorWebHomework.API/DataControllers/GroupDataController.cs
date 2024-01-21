@@ -31,7 +31,7 @@ namespace BlazorWebHomework.API.DataControllers
             return rows;
         }
 
-        public IEnumerable<Group> GetGroups(int skip, int take)
+        public IEnumerable<Group> GetGroups(int skip, int take, string? searchText = null)
         {
             using var connection = GetConnection();
             connection.Open();
@@ -42,6 +42,7 @@ namespace BlazorWebHomework.API.DataControllers
                 {
                     skip,
                     take,
+                    searchText
                 },
                 commandType: CommandType.StoredProcedure);
             return rows;
@@ -62,13 +63,17 @@ namespace BlazorWebHomework.API.DataControllers
             return row;
         }
 
-        public int? GetCount()
+        public int? GetCount(string? searchText = null)
         {
             using var connection = GetConnection();
             connection.Open();
 
             var row = connection.QueryFirstOrDefault<int>(
                 DatabaseConstants.GetCount,
+                new
+                {
+                    searchText
+                },
                 commandType: CommandType.StoredProcedure);
             return row;
         }

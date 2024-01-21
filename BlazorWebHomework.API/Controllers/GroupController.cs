@@ -38,11 +38,11 @@ namespace BlazorWebHomework.API.Controllers
         }
 
         [HttpGet("GetGroups")]
-        public IActionResult GetGroups(int Skip, int Take)
+        public IActionResult GetGroups(int Skip, int Take, string? SearchText = null)
         {
             try
             {
-                var groups = _groupDataController.GetGroups(Skip, Take);
+                var groups = _groupDataController.GetGroups(Skip, Take, SearchText);
                 return Ok(groups);
             }
             catch (SqlException ex)
@@ -80,11 +80,11 @@ namespace BlazorWebHomework.API.Controllers
         }
 
         [HttpGet("GetCount")]
-        public IActionResult GetCount()
+        public IActionResult GetCount(string? searchText = null)
         {
             try
             {
-                var count = _groupDataController.GetCount();
+                var count = _groupDataController.GetCount(searchText);
                 return Ok(count);
             }
             catch (SqlException ex)

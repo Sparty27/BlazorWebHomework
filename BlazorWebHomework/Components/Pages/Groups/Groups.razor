@@ -9,8 +9,18 @@
 <h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm">Групи</h3>
 
 <article class="content px-4">
-    <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateGroup"
-                  class="bg-gradient-to-r from-purple-500 to-pink-500 my-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
+
+    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Style="position:relative;" class="my-[25px]">
+        <RadzenButton id="add-button" style="border-radius: 25px;position:absolute;left:0px;" Icon="add" Text="Добавити" Click="CreateGroup"
+                      class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-[25px] hover:bg-black"></RadzenButton>
+
+        <RadzenStack class="mx-[175px] max-w-[550px] w-full gap-x-6" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenTextBox class="max-w-[400px] w-full" @bind-Value=SearchText>
+            </RadzenTextBox>
+            <RadzenButton Text="Пошук" class="w-[85px] min-w-[85px]" Click="Search">
+            </RadzenButton>
+        </RadzenStack>
+    </RadzenRow>
 
     @if (groups == null)
     {
@@ -61,27 +71,36 @@
 
 @code {
     List<Group> groups = new List<Group>();
-    string pagingSummaryFormat = "Displaying page {0} of {1} (total {2} records)";
+    string pagingSummaryFormat = "Поточна сторінка {0} з {1} (загалом {2} записів)";
     PagerProperties pagerProperties = new() { PageSize = 5};
+    string? SearchText { get; set; }
 
 
 
     protected override async Task OnInitializedAsync()
     {
-        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>("api/Group/GetCount") ?? 0;
+        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>($"api/Group/GetCount?searchText={SearchText}") ?? 0;
 
         groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+    }
+
+    async Task Search()
+    {
+
+        groups = await GetGroups(0, pagerProperties.PageSize);
+        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>($"api/Group/GetCount?searchText={SearchText}") ?? 0;
     }
 
     async Task PageChanged(PagerEventArgs args)
     {
         pagerProperties.Skip = args.Skip;
         groups = await GetGroups(args.Skip, args.Top)!;
+        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>($"api/Group/GetCount?searchText={SearchText}") ?? 0;
     }
 
     async Task<List<Group>> GetGroups(int skip, int take)
     {
-        var response = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroups?skip={skip}&take={take}");
+        var response = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroups?skip={skip}&take={take}&searchText={SearchText}");
         if (response is null) Navigation.NavigateTo("/404");
         return response!;
     }
