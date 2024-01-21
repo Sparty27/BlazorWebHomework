@@ -12,6 +12,7 @@ namespace BlazorWebHomework.Models
         public string StudentFirstName { get; set; } = string.Empty;
         public string StudentLastName { get; set;} = string.Empty;
         public int StudentGroupId { get; set; } = 0;
+        public string StudentGroupName { get; set; } = string.Empty;
         public double StudentAvgScore { get; set; }
         public DateTime StudentRegistrationDate { get; set; }
     }

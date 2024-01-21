@@ -1,0 +1,101 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<RadzenStack Gap="1rem">
+    <RadzenRow JustifyContent="JustifyContent.Center">
+        <b style="font-size: 24px;">ID @Student.StudentId</b>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border)">
+            <RadzenText TextStyle="TextStyle.Subtitle1">Дані</RadzenText>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                <RadzenImage Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="" />
+                <RadzenStack Gap="0" Class="rz-text-truncate">
+                    <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Ім'я</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentFirstName</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4 rz-mb-0" Style="color: var(--rz-text-tertiary-color);">Прізвище</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentLastName</b></RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+            <RadzenRow JustifyContent="JustifyContent.Center">
+                <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4 rz-mb-0" Style="color: var(--rz-text-tertiary-color);">Номер телефона</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>+38 (050) 02-43-492</b></RadzenText>
+            </RadzenRow>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border)">
+            <RadzenText TextStyle="TextStyle.Subtitle1">Навчальна інформація</RadzenText>
+            <RadzenStack Gap="0" Class="rz-text-truncate">
+                <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Група</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentGroupName</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Середній бал</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentAvgScore</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Дата реєстрації</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentRegistrationDate.ToShortDateString()</b></RadzenText>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Icon="edit" Click="(x => EditStudent(Student))" id="edit-button-student"></RadzenButton>
+        <RadzenButton Icon="delete_forever" Click="(x => ConfirmDelete(Student.StudentId))" id="delete-button-student"
+            class="bg-red-500 delete-button-student" ButtonStyle="ButtonStyle.Danger"></RadzenButton>
+    </RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0.5rem">
+        <RadzenButton Click="@((args) => DialogService.Close(false))" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Light" Text="Скасувати" Style="width: 120px" />
+        <RadzenButton Attributes="InputAttributesDeleteButton" Click="@((args) => DialogService.Close(true))" Variant="Variant.Flat" Text="ОК" Style="width: 120px" />
+    </RadzenStack>
+</RadzenStack>
+@code {
+    [Parameter] public Student Student { get; set; } = new();
+    [Parameter] public List<Student> Students { get; set; } = new();
+    [Parameter] public RadzenDataGrid<Student> Grid { get; set; }
+
+    private Dictionary<string, object> InputAttributesDeleteButton { get; set; } =
+    new()
+        {
+            { "background-color", "red" },
+        };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    async Task EditStudent(Student student)
+    {
+        var response = await DialogService.OpenAsync<EditStudent>("Редагувати студента", new Dictionary<string, object> { { "StudentParameter", student }, { "Students", Students} },
+                                                new DialogOptions() { AutoFocusFirstElement = false });
+    }
+
+    async Task ConfirmDelete(int studentId)
+    {
+        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
+                        new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
+
+        if (IsConfirmed)
+        {
+            var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Student/DeleteStudent?studentId={studentId}");
+
+            if (result > 1)
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Успіх!",
+                        Detail = "Дані були успішно видалені",
+                        Duration = 5000
+                    });
+
+                var student = Students.FirstOrDefault(f => f.StudentId == studentId);
+
+                if (student is not null) Students.Remove(student);
+                Grid?.Reload();
+
+                DialogService.Close(true);
+            }
+        }
+    }
+}

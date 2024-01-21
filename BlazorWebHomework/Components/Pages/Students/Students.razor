@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Студенти</PageTitle>
-<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm">Студенти</h3>
+<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm page-header">Студенти</h3>
 
 <article class="content px-4">
     <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateStudent"
@@ -17,7 +17,25 @@
     }
     else
     {
-        <table class="table">
+        <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        Data="@students" TItem="Student" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+            <Columns>
+                <RadzenDataGridColumn TItem="Student" Property="StudentId" Filterable="false" Title="ID" Frozen="true" Width="75px" TextAlign="TextAlign.Center"/>
+                <RadzenDataGridColumn TItem="Student" Property="StudentRegistrationDate" Title="Дата реєстрації" FormatString="{0:d}" Width="160px" />
+                <RadzenDataGridColumn TItem="Student" Property="StudentLastName" Title="Прізвище" Width="160px" />
+                <RadzenDataGridColumn TItem="Student" Property="StudentFirstName" Title="Ім'я" Width="160px" />
+                <RadzenDataGridColumn TItem="Student" Property="StudentGroupName" Title="Група" Width="160px" />
+                <RadzenDataGridColumn TItem="Student" Property="StudentAvgScore" Title="Середній бал" Width="160px" />
+                <RadzenDataGridColumn Sortable="false" TItem="Student" Title="Інформація" Width="80px" TextAlign="TextAlign.Center">
+                    <Template Context="data" >
+                        <RadzenButton ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="info" class="m-1" Click=@(() => OpenStudentInfo(data)) />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+
+@*         <table class="table">
             <thead>
                 <tr>
                     <th><div class="flex justify-content-center">ID</div></th>
@@ -54,18 +72,17 @@
                     </tr>
                 }
             </tbody>
-        </table>
+        </table> *@
     }
 </article>
 
 @code {
-    List<StudentViewModel> students = new List<StudentViewModel>();
+    RadzenDataGrid<Student> grid;
+    List<Student> students = new List<Student>();
 
     protected override async Task OnInitializedAsync()
     {
-        students = await HttpClient.GetFromJsonAsync<List<StudentViewModel>>("api/Student/GetAllStudents") ?? new List<StudentViewModel>();
-
-        students = students.OrderBy(s => s.StudentGroupName).ToList();
+        students = await HttpClient.GetFromJsonAsync<List<Student>>("api/Student/GetAllStudents") ?? new List<Student>();
     }
 
     async Task CreateStudent()
@@ -73,7 +90,7 @@
         var response = await DialogService.OpenAsync<CreateStudent>("Добавити студента", new Dictionary<string, object> { { "Students", students } });        
     }
 
-    async Task EditStudent(StudentViewModel student)
+    async Task EditStudent(Student student)
     {
         var response = await DialogService.OpenAsync<EditStudent>("Редагувати студента", new Dictionary<string, object> { { "StudentParameter", student }, { "Students", students } },
                                                 new DialogOptions() { AutoFocusFirstElement = false });
@@ -103,5 +120,11 @@
                 if (student is not null) students.Remove(student);
             }
         }
+    }
+
+    async Task OpenStudentInfo(Student student)
+    {
+        var response = await DialogService.OpenAsync<StudentInfo>("Інформація про студента", new Dictionary<string, object> { { "Student", student }, { "Students", students }, { "Grid", grid } },
+                                        new DialogOptions() { AutoFocusFirstElement = false });
     }
 }

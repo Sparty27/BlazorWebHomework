@@ -28,6 +28,6 @@ BEGIN
 
     UPDATE Groups
     SET GroupNumStudents = @numOfStudents,
-        GroupAvgScore = @avgScoreOfStudents
+        GroupAvgScore = ISNULL(@avgScoreOfStudents, 0)
     WHERE GroupId = @StudentGroupId;
 END;

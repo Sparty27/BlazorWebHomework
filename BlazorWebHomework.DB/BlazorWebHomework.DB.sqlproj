@@ -64,28 +64,16 @@
     <Folder Include="dbo\PostDeployment" />
     <Folder Include="dbo\Triggers" />
     <Folder Include="dbo\Stored Procedures\Groups" />
+    <Folder Include="dbo\Stored Procedures\Students" />
+    <Folder Include="dbo\Stored Procedures\Faculties" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Groups.sql" />
     <Build Include="dbo\Tables\Students.sql" />
     <Build Include="dbo\Tables\Departments.sql" />
     <Build Include="dbo\Tables\Faculties.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_GetAllFaculties.sql" />
     <Build Include="dbo\Stored Procedures\sp_Departments_GetAllDepartments.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_GetFaculties.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_CreateFaculty.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_DeleteFaculty.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_UpdateFaculty.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_GetFacultyById.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Faculties_GetAllFacultiesWithDepartments.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_GetAllStudents.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_CreateStudent.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_GetStudentViewModelById.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_DeleteStudent.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_GetStudentById.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_UpdateStudent.sql" />
     <Build Include="dbo\Triggers\trg_Student.sql" />
-    <Build Include="dbo\Stored Procedures\sp_Students_GetStudents.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetCount.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetAllGroups.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetGroups.sql" />
@@ -93,6 +81,20 @@
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_CreateGroup.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetGroupByName.sql" />
     <Build Include="dbo\Stored Procedures\Groups\sp_Groups_UpdateGroup.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_UpdateStudent.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_CreateStudent.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_DeleteStudent.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_GetAllStudents.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudentById.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudents.sql" />
+    <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudentViewModelById.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_UpdateFaculty.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_CreateFaculty.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_DeleteFaculty.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetAllFaculties.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetAllFacultiesWithDepartments.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetFaculties.sql" />
+    <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetFacultyById.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

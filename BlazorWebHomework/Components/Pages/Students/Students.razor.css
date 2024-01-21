@@ -4,8 +4,8 @@
 
 .students__data {
     vertical-align: middle;
-    word-wrap: break-word; /* Дозволяє переносити слова, якщо вони не поміщаються в рядок */
-    overflow: hidden; /* Обрізає текст, який не поміщається в рядок */
+    word-wrap: break-word;  /*Дозволяє переносити слова, якщо вони не поміщаються в рядок */
+    overflow: hidden;  /*Обрізає текст, який не поміщається в рядок */
 }
 
 .students__data-id {
@@ -16,4 +16,13 @@
 .students__data-block {
     display: flex;
     gap: 10px;
+}
+
+.page-header {
+    font-family: 'Source Sans 3';
+}
+
+.rz-grid-table td {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
 }
