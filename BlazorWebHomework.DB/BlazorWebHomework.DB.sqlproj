@@ -87,7 +87,6 @@
     <Build Include="dbo\Stored Procedures\Students\sp_Students_GetAllStudents.sql" />
     <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudentById.sql" />
     <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudents.sql" />
-    <Build Include="dbo\Stored Procedures\Students\sp_Students_GetStudentViewModelById.sql" />
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_UpdateFaculty.sql" />
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_CreateFaculty.sql" />
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_DeleteFaculty.sql" />

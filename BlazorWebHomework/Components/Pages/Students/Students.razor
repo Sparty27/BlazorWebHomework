@@ -8,8 +8,17 @@
 <h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm page-header">Студенти</h3>
 
 <article class="content px-4">
-    <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateStudent"
-                  class="bg-gradient-to-r from-purple-500 to-pink-500 my-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
+    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Style="position:relative;" class="my-[25px]">
+        <RadzenButton id="add-button" style="border-radius: 25px;position:absolute;left:0px;" Icon="add" Text="Добавити" Click="CreateStudent"
+                      class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-[25px] hover:bg-black"></RadzenButton>
+
+        <RadzenStack class="mx-[175px] max-w-[500px] w-full gap-x-6" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenTextBox class="max-w-[400px] w-full" @bind-Value=SearchText Placeholder="Мельник Вадим...">
+            </RadzenTextBox>
+            <RadzenButton Text="Пошук" class="w-[85px] min-w-[85px]" Click="Search">
+            </RadzenButton>
+        </RadzenStack>
+    </RadzenRow>
 
     @if (students == null)
     {
@@ -17,7 +26,9 @@
     }
     else
     {
-        <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+        <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" 
+                        PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        PagingSummaryFormat="Сторінка {0} з {1} ({2} рядків)"
                         Data="@students" TItem="Student" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
             <Columns>
                 <RadzenDataGridColumn TItem="Student" Property="StudentId" Filterable="false" Title="ID" Frozen="true" Width="75px" TextAlign="TextAlign.Center"/>
@@ -79,15 +90,23 @@
 @code {
     RadzenDataGrid<Student> grid;
     List<Student> students = new List<Student>();
+    string? SearchText { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         students = await HttpClient.GetFromJsonAsync<List<Student>>("api/Student/GetAllStudents") ?? new List<Student>();
     }
 
+    async Task Search()
+    {
+
+        students = await HttpClient.GetFromJsonAsync<List<Student>>($"api/Student/GetAllStudents?searchText={SearchText}") ?? new List<Student>();
+    }
+
     async Task CreateStudent()
     {
-        var response = await DialogService.OpenAsync<CreateStudent>("Добавити студента", new Dictionary<string, object> { { "Students", students } });        
+        var response = await DialogService.OpenAsync<CreateStudent>("Добавити студента", 
+                        new Dictionary<string, object> { { "Students", students }, { "Grid", grid } });
     }
 
     async Task EditStudent(Student student)
@@ -124,7 +143,8 @@
 
     async Task OpenStudentInfo(Student student)
     {
-        var response = await DialogService.OpenAsync<StudentInfo>("Інформація про студента", new Dictionary<string, object> { { "Student", student }, { "Students", students }, { "Grid", grid } },
-                                        new DialogOptions() { AutoFocusFirstElement = false });
+        var response = await DialogService.OpenAsync<StudentInfo>("Інформація про студента", 
+                        new Dictionary<string, object> { { "Student", student }, { "Students", students }, { "Grid", grid } },
+                        new DialogOptions() { AutoFocusFirstElement = false });
     }
 }

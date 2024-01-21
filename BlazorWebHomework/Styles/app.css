@@ -11,12 +11,12 @@
 #edit-button-student {
     background-color: deepskyblue !important;
 }
-/*#add-button {
+#add-button {
     --tw-bg-opacity: 1;
     background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
-#delete-button-faculty {
+/*#delete-button-faculty {
     --tw-bg-opacity: 1;
     background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }

@@ -26,7 +26,7 @@
             </div>
 
             <div class="rz-text-align-center mr-[50px] relative">
-                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;"
+                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;width:197px;"
                                Placeholder="Введіть середній бал" Name="StudentAvgScore" Min="1" Max="100" Format="0.00" />
                 <RadzenRequiredValidator Component="StudentAvgScore" Text="Введіть середній бал" Popup="true" Style="position: absolute;" />
                 <RadzenNumericRangeValidator Component="StudentAvgScore" Min="1" Max="100" Text="Значення може бути від 1 до 100" Popup="true" Style="position:absolute;left:0px;" />
@@ -81,27 +81,34 @@
     //     Groups = Groups.OrderBy(g => g.GroupName).ToList();
     // }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var response = await HttpClient.GetFromJsonAsync<Student>($"api/Student/GetStudentById?studentId={StudentParameter.StudentId}");
-
-        if (response is not null) Student = response;
-        else Navigation.NavigateTo("/404");
-
-        Groups = await HttpClient.GetFromJsonAsync<List<Group>>("api/Group/GetAllGroups")  ?? new List<Group>();
-
-        Groups = Groups.OrderBy(g => g.GroupName).ToList();
-    }
-
     private Student Student { get; set; } = new();
-
     private List<Group>? Groups { get; set; }
 
-    [Parameter]
-    public StudentViewModel StudentParameter { get; set; } = new();
+    [Parameter] public Student StudentParameter { get; set; } = new();
+    [Parameter] public List<Student>? Students { get; set; }
+    [Parameter] public RadzenDataGrid<Student> Grid { get; set; }
 
-    [Parameter]
-    public List<StudentViewModel>? Students { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Student.StudentId = StudentParameter.StudentId;
+        Student.StudentFirstName = StudentParameter.StudentFirstName;
+        Student.StudentLastName = StudentParameter.StudentLastName;
+        Student.StudentGroupName = StudentParameter.StudentGroupName;
+        Student.StudentGroupId = StudentParameter.StudentGroupId;
+        Student.StudentAvgScore = StudentParameter.StudentAvgScore;
+        Student.StudentRegistrationDate = StudentParameter.StudentRegistrationDate;
+
+        Console.WriteLine(Student.StudentId);
+        Console.WriteLine(Student.StudentFirstName);
+        Console.WriteLine(Student.StudentLastName);
+        Console.WriteLine(Student.StudentGroupName);
+        Console.WriteLine(Student.StudentGroupId);
+        Console.WriteLine(Student.StudentAvgScore);
+
+        Groups = await HttpClient.GetFromJsonAsync<List<Group>>("api/Group/GetAllGroups")  ?? new List<Group>();
+        Groups = Groups.OrderBy(g => g.GroupName).ToList();
+    }
 
     async Task Submit(Student args)
     {
@@ -126,15 +133,18 @@
                         Duration = 5000
                     });
 
-                var student = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentViewModelById?studentId={args.StudentId}");
+                var student = await HttpClient.GetFromJsonAsync<Student>($"api/Student/GetStudentById?studentId={args.StudentId}");
 
                 if (student is not null)
                 {
                     StudentParameter.StudentFirstName = student.StudentFirstName;
                     StudentParameter.StudentLastName = student.StudentLastName;
                     StudentParameter.StudentGroupName = student.StudentGroupName;
+                    StudentParameter.StudentGroupId = student.StudentGroupId;
                     StudentParameter.StudentAvgScore = student.StudentAvgScore;
                     StudentParameter.StudentRegistrationDate = student.StudentRegistrationDate;
+
+                    Grid?.Reload();
                 }
             }
             else

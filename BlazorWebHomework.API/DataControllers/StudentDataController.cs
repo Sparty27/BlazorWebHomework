@@ -17,13 +17,17 @@ namespace BlazorWebHomeworkAPI.DataControllers
             _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
-        public IEnumerable<StudentViewModel> GetAllStudents()
+        public IEnumerable<Student> GetAllStudents(string? searchText = null)
         {
             using var connection = GetConnection();
             connection.Open();
 
-            var rows = connection.Query<StudentViewModel>(
+            var rows = connection.Query<Student>(
                 DatabaseConstants.GetAllStudents,
+                new
+                {
+                    searchText,
+                },
                 commandType: CommandType.StoredProcedure);
             return rows;
         }
@@ -34,20 +38,6 @@ namespace BlazorWebHomeworkAPI.DataControllers
             connection.Open();
             var row = connection.QueryFirstOrDefault<Student>(
                 DatabaseConstants.GetStudentById,
-                new
-                {
-                    studentId
-                },
-                commandType: CommandType.StoredProcedure);
-            return row;
-        }
-
-        public StudentViewModel? GetStudentViewModelById(int studentId)
-        {
-            using var connection = GetConnection();
-            connection.Open();
-            var row = connection.QueryFirstOrDefault<StudentViewModel>(
-                DatabaseConstants.GetStudentViewModelById,
                 new
                 {
                     studentId

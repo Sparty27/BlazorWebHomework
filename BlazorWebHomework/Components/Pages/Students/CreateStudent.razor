@@ -26,7 +26,7 @@
             </div>
 
             <div class="rz-text-align-center mr-[50px] relative">
-                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;"
+                <RadzenNumeric Culture="CultureInfo.InvariantCulture" ShowUpDown="false" TValue="double" @bind-Value="Student.StudentAvgScore" Style="display:block;width:197px;"
                                 Placeholder="Введіть середній бал" Name="StudentAvgScore" Min="1" Max="100" Format="0.00"/>
                 <RadzenRequiredValidator Component="StudentAvgScore" Text="Введіть середній бал" Popup="true" Style="position: absolute;" />
                 <RadzenNumericRangeValidator Component="StudentAvgScore" Min="1" Max="100" Text="Значення може бути від 1 до 100" Popup="true" Style="position:absolute;left:0px;"/>
@@ -75,11 +75,11 @@
     }
 
     private Student Student { get; set; } = new();
-
     private List<Group>? Groups { get; set; }
 
-    [Parameter]
-    public List<StudentViewModel>? Students { get; set; }
+    [Parameter] public List<Student>? Students { get; set; }
+    [Parameter] public RadzenDataGrid<Student> Grid { get; set; }
+
 
 
     int targetValue = 0;
@@ -108,12 +108,11 @@
                         Duration = 5000
                     });
 
-                var addedStudent = await HttpClient.GetFromJsonAsync<StudentViewModel>($"api/Student/GetStudentViewModelById?studentId={result}");
+                var addedStudent = await HttpClient.GetFromJsonAsync<Student>($"api/Student/GetStudentById?studentId={result}");
                 if (addedStudent is not null) 
                 {
                     Students?.Add(addedStudent);
-
-                    Navigation.NavigateTo("/students", true);
+                    Grid?.Reload();
                 }
             }
             else

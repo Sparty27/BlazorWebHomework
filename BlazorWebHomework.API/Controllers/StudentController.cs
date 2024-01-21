@@ -18,11 +18,11 @@ namespace BlazorWebHomeworkAPI.Controllers
         }
 
         [HttpGet("GetAllStudents")]
-        public IActionResult GetAllStudents()
+        public IActionResult GetAllStudents(string? searchText = null)
         {
             try
             {
-                var students = _studentDataController.GetAllStudents();
+                var students = _studentDataController.GetAllStudents(searchText);
                 return Ok(students);
             }
             catch (SqlException ex)
@@ -43,26 +43,6 @@ namespace BlazorWebHomeworkAPI.Controllers
             try
             {
                 var student = _studentDataController.GetStudentById(studentId);
-                return Ok(student);
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest("Problem with database");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("GetStudentViewModelById")]
-        public IActionResult GetStudentViewModelById(int studentId)
-        {
-            try
-            {
-                var student = _studentDataController.GetStudentViewModelById(studentId);
                 return Ok(student);
             }
             catch (SqlException ex)

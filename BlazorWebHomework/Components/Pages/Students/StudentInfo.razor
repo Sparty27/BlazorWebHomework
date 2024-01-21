@@ -20,7 +20,7 @@
                     <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@Student.StudentLastName</b></RadzenText>
                 </RadzenStack>
             </RadzenStack>
-            <RadzenRow JustifyContent="JustifyContent.Center">
+            <RadzenRow AlignItems="AlignItems.Center" Style="flex-direction:column;">
                 <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4 rz-mb-0" Style="color: var(--rz-text-tertiary-color);">Номер телефона</RadzenText>
                 <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>+38 (050) 02-43-492</b></RadzenText>
             </RadzenRow>
@@ -66,7 +66,7 @@
 
     async Task EditStudent(Student student)
     {
-        var response = await DialogService.OpenAsync<EditStudent>("Редагувати студента", new Dictionary<string, object> { { "StudentParameter", student }, { "Students", Students} },
+        var response = await DialogService.OpenAsync<EditStudent>("Редагувати студента", new Dictionary<string, object> { { "StudentParameter", student }, { "Students", Students}, { "Grid", Grid } },
                                                 new DialogOptions() { AutoFocusFirstElement = false });
     }
 
