@@ -82,12 +82,12 @@
             if (result > 1)
             {
                 NotificationService.Notify(new NotificationMessage
-                    {
-                        Severity = NotificationSeverity.Success,
-                        Summary = "Успіх!",
-                        Detail = "Дані були успішно видалені",
-                        Duration = 5000
-                    });
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Успіх!",
+                    Detail = "Дані були успішно видалені",
+                    Duration = 5000
+                });
 
                 var student = Students.FirstOrDefault(f => f.StudentId == studentId);
 

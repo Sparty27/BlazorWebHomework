@@ -115,32 +115,6 @@
                                                 new DialogOptions() { AutoFocusFirstElement = false });
     }
 
-    async Task ConfirmDelete(int studentId)
-    {
-        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
-                        new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
-
-        if (IsConfirmed)
-        {
-            var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Student/DeleteStudent?studentId={studentId}");
-
-            if (result > 1)
-            {
-                NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Success,
-                    Summary = "Успіх!",
-                    Detail = "Дані були успішно видалені",
-                    Duration = 5000
-                });
-
-                var student = students.FirstOrDefault(f => f.StudentId == studentId);
-
-                if (student is not null) students.Remove(student);
-            }
-        }
-    }
-
     async Task OpenStudentInfo(Student student)
     {
         var response = await DialogService.OpenAsync<StudentInfo>("Інформація про студента", 

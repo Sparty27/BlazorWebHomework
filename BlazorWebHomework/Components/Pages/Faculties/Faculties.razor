@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Факультети</PageTitle>
-<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm">Факультети</h3>
+<h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm faculties__header">Факультети</h3>
 
 <article class="content px-4">
     <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateFaculty"
@@ -17,7 +17,39 @@
     }
     else
     {
-        <table class="table">
+        <RadzenDataGrid @ref="grid" AllowFiltering="false" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true"
+                        PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        PagingSummaryFormat="Сторінка {0} з {1} ({2} рядків)" class="mb-[50px]"
+                        Data="@faculties" TItem="Faculty" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+            <Columns>
+                <RadzenDataGridColumn TItem="Faculty" Property="FacultyId" Filterable="false" Title="ID" Frozen="true" Width="75px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="Faculty" Property="FacultyName" Title="Факультет" Width="300px" />
+                <RadzenDataGridColumn TItem="Faculty" Property="FacultyDepartments" Title="Кафедри" Width="300px" Sortable="false">
+                    <Template Context="data">
+                        <ul>
+                            @foreach (string department in data.FacultyDepartments.Split("&&"))
+                            {
+                                <li class="faculty-department-data">@department</li>
+                            }
+                        </ul>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Faculty" Property="FacultyNotes" Title="Примітка" Width="300px" Sortable="false">
+                    <Template Context="data">
+                        <p style="white-space:pre-wrap;">
+                            @data.FacultyNotes
+                        </p>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn Sortable="false" TItem="Faculty" Title="Інформація" Width="80px" TextAlign="TextAlign.Center">
+                    <Template Context="data">
+                        <RadzenButton ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="info" class="m-1" Click=@(() => OpenFacultyInfo(data)) />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+@*         <table class="table">
             <thead>
                 <tr>
                     <th><div class="flex justify-content-center">ID</div></th>
@@ -48,47 +80,30 @@
                     </tr>
                 }
             </tbody>
-        </table>
+        </table> *@
     }
 </article>
 
 @code {
     List<Faculty> faculties = new List<Faculty>();
+    RadzenDataGrid<Faculty> grid;
+
 
     protected override async Task OnInitializedAsync()
     {
-        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetFaculties") ?? new List<Faculty>();
+        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetAllFaculties") ?? new List<Faculty>();
     }
 
     async Task CreateFaculty()
     {
-        var response = await DialogService.OpenAsync<CreateFaculty>("Добавити факультет", new Dictionary<string, object> { { "Faculties", faculties } });
+        var response = await DialogService.OpenAsync<CreateFaculty>("Добавити факультет", 
+                new Dictionary<string, object> { { "Faculties", faculties }, { "Grid", grid } });
     }
 
-    async Task EditFaculty(Faculty faculty)
+    async Task OpenFacultyInfo(Faculty faculty)
     {
-        var response = await DialogService.OpenAsync<EditFaculty>("Редагувати факультет", new Dictionary<string, object> { { "FacultyParameter", faculty }, { "Faculties", faculties} },
-            new DialogOptions() { AutoFocusFirstElement = false });
-    }
-
-    async Task ConfirmDelete(int facultyId)
-    {
-        bool IsConfirmed = await DialogService.Confirm("Ви дійсно хочете видалити вибраний рядок?", "Ви впевнені?",
-                                new ConfirmOptions() { AutoFocusFirstElement = false, OkButtonText = "Так", CancelButtonText = "Ні" }) ?? false;
-
-        if (IsConfirmed)
-        {
-            var result = await HttpClient.DeleteFromJsonAsync<int>($"api/Faculty/DeleteFaculty?facultyId={facultyId}");
-
-            if (result == 1)
-            {
-                NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, 
-                    Summary = "Успіх!", Detail = "Дані були успішно видалені", Duration = 5000});
-
-                var faculty = faculties.FirstOrDefault(f => f.FacultyId == facultyId);
-
-                if (faculty is not null) faculties.Remove(faculty);
-            }
-        }
+        var response = await DialogService.OpenAsync<FacultyInfo>("Інформація про факультет",
+                new Dictionary<string, object> { { "Faculty", faculty }, { "Faculties", faculties }, { "Grid", grid } },
+                new DialogOptions() { AutoFocusFirstElement = false });
     }
 }

@@ -3,10 +3,7 @@
 @tailwind utilities;
 
 
-.rz-grid-table td {
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
-}
+
 
 #edit-button-student {
     background-color: deepskyblue !important;

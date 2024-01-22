@@ -31,8 +31,8 @@
 
     private Faculty Faculty { get; set; } = new();
 
-    [Parameter]
-    public List<Faculty>? Faculties { get; set; }
+    [Parameter] public List<Faculty>? Faculties { get; set; }
+    [Parameter] public RadzenDataGrid<Faculty> Grid { get; set; }
 
     async Task Submit(Faculty args)
     {
@@ -57,7 +57,11 @@
                     });
 
                 var addedFaculty = await HttpClient.GetFromJsonAsync<Faculty>($"api/Faculty/GetFacultyById?id={result}");
-                if (addedFaculty is not null) Faculties?.Add(addedFaculty);
+                if (addedFaculty is not null)
+                {
+                    Faculties?.Add(addedFaculty);
+                    Grid?.Reload();
+                }
             }
             else
             {

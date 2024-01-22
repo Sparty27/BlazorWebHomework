@@ -17,13 +17,13 @@ namespace BlazorWebHomeworkAPI.DataControllers
             _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
-        public IEnumerable<FacultyModel> GetAllFacultiesWithDepartments()
+        public IEnumerable<Faculty> GetAllFaculties()
         {
             using var connection = GetConnection();
             connection.Open();
 
-            var rows = connection.Query<FacultyModel>(
-                DatabaseConstants.GetAllFacultiesWithDepartments,
+            var rows = connection.Query<Faculty>(
+                DatabaseConstants.GetAllFaculties,
                 commandType: CommandType.StoredProcedure);
             return rows;
         }

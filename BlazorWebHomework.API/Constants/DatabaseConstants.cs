@@ -3,7 +3,6 @@
     public static class DatabaseConstants
     {
         #region Faculties
-        public const string GetAllFacultiesWithDepartments = "sp_Faculties_GetAllFacultiesWithDepartments";
         public const string GetAllFaculties = "sp_Faculties_GetAllFaculties";
         public const string GetFaculties = "sp_Faculties_GetFaculties";
         public const string GetFacultyById = "sp_Faculties_GetFacultyById";

@@ -1,5 +1,5 @@
 ﻿.faculties__header {
-    margin-bottom: 30px;
+    font-family: 'Source Sans 3';
 }
 
 .faculties__data {
@@ -16,10 +16,6 @@
 .faculties__data-block {
     display: flex;
     gap: 10px;
-}
-
-* {
-    font-family: 'Source Sans 3';
 }
 
 .rz-dialog-title {

@@ -1,0 +1,15 @@
+﻿.faculty-notes-data {
+    white-space: pre-wrap;
+}
+.faculty-department-data {
+    margin-bottom: 10px !important;
+}
+
+.faculty-department-data:last-child {
+    margin-bottom: 0px !important;
+}
+
+.rz-grid-table td {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}

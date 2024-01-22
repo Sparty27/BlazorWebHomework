@@ -18,11 +18,11 @@ namespace BlazorWebHomeworkAPI.Controllers
         }
 
         [HttpGet("GetAllFaculties")]
-        public IActionResult GetAllFacultiesWithDepartments()
+        public IActionResult GetAllFaculties()
         {
             try
             {
-                var faculties = _facultyDataController.GetAllFacultiesWithDepartments();
+                var faculties = _facultyDataController.GetAllFaculties();
                 return Ok(faculties);
             }
             catch (SqlException ex)
