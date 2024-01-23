@@ -41,9 +41,12 @@
                         </p>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn Sortable="false" TItem="Faculty" Title="Інформація" Width="80px" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn Sortable="false" TItem="Faculty" Title="Інформація" Width="200px" TextAlign="TextAlign.Center">
                     <Template Context="data">
                         <RadzenButton ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" Icon="info" class="m-1" Click=@(() => OpenFacultyInfo(data)) />
+                        <RadzenButton Icon="query_stats" Text="Діаграма"
+                                      class="m-1 bg-gradient-to-r from-purple-500 to-pink-500 my-[25px]  hover:bg-black"  
+                                      Click=@(() => OpenDiagram(data.FacultyId, data.FacultyName)) />
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -105,5 +108,12 @@
         var response = await DialogService.OpenAsync<FacultyInfo>("Інформація про факультет",
                 new Dictionary<string, object> { { "Faculty", faculty }, { "Faculties", faculties }, { "Grid", grid } },
                 new DialogOptions() { AutoFocusFirstElement = false });
+    }
+
+    async Task OpenDiagram(int facultyId, string facultyName)
+    {
+        var response = await DialogService.OpenAsync<FacultyDiagram>("Діаграми",
+        new Dictionary<string, object> { { "FacultyIdParameter", facultyId }, { "FacultyNameParameter", facultyName } },
+        new DialogOptions() { AutoFocusFirstElement = false });
     }
 }

@@ -48,6 +48,21 @@ namespace BlazorWebHomework.API.DataControllers
             return rows;
         }
 
+        public IEnumerable<Group> GetGroupsByFacultyId(int facultyId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            var rows = connection.Query<Group>(
+                DatabaseConstants.GetGroupsByFacultyId,
+                new
+                {
+                    facultyId
+                },
+                commandType: CommandType.StoredProcedure);
+            return rows;
+        }
+
         public int? GetGroupByName(string groupName)
         {
             using var connection = GetConnection();

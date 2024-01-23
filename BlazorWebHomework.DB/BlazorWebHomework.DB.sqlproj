@@ -94,6 +94,7 @@
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetAllFacultiesWithDepartments.sql" />
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetFaculties.sql" />
     <Build Include="dbo\Stored Procedures\Faculties\sp_Faculties_GetFacultyById.sql" />
+    <Build Include="dbo\Stored Procedures\Groups\sp_Groups_GetGroupsByFacultyId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\PostDeployment\Script.PostDeployment.sql" />

@@ -1,0 +1,59 @@
+﻿@inject DialogService DialogService
+@inject HttpClient HttpClient
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<div class="rz-p-sm-4">
+    <RadzenMenu class="flex justify-between">
+        <RadzenMenuItem Text="Діаграма колонок" Click="(x => ChangeDiagramPage(DiagramPages.Series))" />
+        <RadzenMenuItem Text="Діаграма лінії" Click="(x => ChangeDiagramPage(DiagramPages.Line))" />
+        <RadzenMenuItem Text="Діаграма стовпців" Click="(x => ChangeDiagramPage(DiagramPages.Column))" />
+    </RadzenMenu>
+</div>
+<div Class="rz-p-0 rz-p-md-12" hidden="@(currentDiagramPage != DiagramPages.Series)">
+    <RadzenChart>
+        <RadzenColumnSeries Data="@Groups" CategoryProperty="GroupName" ValueProperty="GroupAvgScore" Title=" "/>
+    </RadzenChart>
+</div>
+<div class="container" hidden="@(currentDiagramPage != DiagramPages.Line)">
+    <div class="row">
+        <div class="col-sm-12 my-5 line-chart">
+            <RadzenChart>
+                <RadzenLineSeries  Smooth="true" Data="@Groups" CategoryProperty="GroupName" Title=" " ValueProperty="GroupAvgScore">
+                    <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
+                    <RadzenSeriesDataLabels Visible="false" />
+                </RadzenLineSeries>
+                <RadzenCategoryAxis Padding="20"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true" />
+                    <RadzenAxisTitle Text="Середній бал групи"/>
+                </RadzenValueAxis>
+            </RadzenChart>
+        </div>
+    </div>
+</div>
+
+@code {
+    DiagramPages currentDiagramPage { get; set; } = DiagramPages.Series;
+    List<Group> Groups { get; set; } = new();
+    [Parameter] public int FacultyIdParameter { get; set; }
+    [Parameter] public string FacultyNameParameter { get; set; } = string.Empty;
+
+    enum DiagramPages
+    {
+        Series,
+        Line,
+        Bar,
+        Column,
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Groups = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroupsByFacultyId?facultyId={FacultyIdParameter}") ?? new();
+    }
+
+    void ChangeDiagramPage(DiagramPages diagramPage)
+    {
+        currentDiagramPage = diagramPage;
+    }
+}

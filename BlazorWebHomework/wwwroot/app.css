@@ -617,6 +617,10 @@ video {
   margin-bottom: 25px;
 }
 
+.mb-\[50px\] {
+  margin-bottom: 50px;
+}
+
 .ml-\[50px\] {
   margin-left: 50px;
 }
@@ -627,10 +631,6 @@ video {
 
 .mt-\[25px\] {
   margin-top: 25px;
-}
-
-.mb-\[50px\] {
-  margin-bottom: 50px;
 }
 
 .block {
@@ -647,6 +647,10 @@ video {
 
 .grid {
   display: grid;
+}
+
+.hidden {
+  display: none;
 }
 
 .h-\[150px\] {
@@ -715,6 +719,10 @@ video {
 
 .max-w-\[750px\] {
   max-width: 750px;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .gap-x-6 {
