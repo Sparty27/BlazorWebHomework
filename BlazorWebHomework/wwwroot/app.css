@@ -594,6 +594,10 @@ video {
   margin: 0.25rem;
 }
 
+.m-auto {
+  margin: auto;
+}
+
 .mx-\[175px\] {
   margin-left: 175px;
   margin-right: 175px;
@@ -655,6 +659,14 @@ video {
 
 .h-\[150px\] {
   height: 150px;
+}
+
+.h-\[400px\] {
+  height: 400px;
+}
+
+.h-\[300px\] {
+  height: 300px;
 }
 
 .max-h-\[400px\] {
@@ -721,8 +733,16 @@ video {
   max-width: 750px;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .gap-x-6 {

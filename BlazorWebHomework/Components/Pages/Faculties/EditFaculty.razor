@@ -47,11 +47,10 @@
     }
     private Faculty Faculty { get; set; } = new();
 
-    [Parameter]
-    public Faculty FacultyParameter { get; set; } = new();
+    [Parameter] public Faculty FacultyParameter { get; set; } = new();
+    [Parameter] public List<Faculty>? Faculties { get; set; }
+    [Parameter] public RadzenDataGrid<Faculty> Grid { get; set; }
 
-    [Parameter]
-    public List<Faculty>? Faculties { get; set; }
 
     async Task Submit(Faculty args)
     {
@@ -81,6 +80,7 @@
                 {
                     faculty.FacultyName = args.FacultyName;
                     faculty.FacultyNotes = args.FacultyNotes;
+                    Grid?.Reload();
                 }
             }
             else

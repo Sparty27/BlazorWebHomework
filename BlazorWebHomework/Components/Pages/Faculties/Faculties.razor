@@ -8,8 +8,17 @@
 <h3 class="tracking-widest text-4xl font-black text-gray-900 dark:text-white py-[20px] pl-[24px] bg-white shadow-sm faculties__header">Факультети</h3>
 
 <article class="content px-4">
-    <RadzenButton id="add-button" style="border-radius: 25px;" Icon="add" Text="Добавити" Click="CreateFaculty"
-                  class="bg-gradient-to-r from-purple-500 to-pink-500 my-[25px] rounded-[25px] hover:bg-black"></RadzenButton>
+    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Style="position:relative;" class="my-[25px]">
+        <RadzenButton id="add-button" style="border-radius: 25px;position:absolute;left:0px;" Icon="add" Text="Добавити" Click="CreateFaculty"
+                      class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-[25px] hover:bg-black"></RadzenButton>
+
+        <RadzenStack class="mx-[175px] max-w-[500px] w-full gap-x-6" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenTextBox class="max-w-[400px] w-full" @bind-Value=SearchText Placeholder="Факультет комп'ютерних...">
+            </RadzenTextBox>
+            <RadzenButton Text="Пошук" class="w-[85px] min-w-[85px]" Click="Search">
+            </RadzenButton>
+        </RadzenStack>
+    </RadzenRow>
 
     @if (faculties == null)
     {
@@ -88,6 +97,7 @@
 </article>
 
 @code {
+    string? SearchText { get; set; }
     List<Faculty> faculties = new List<Faculty>();
     RadzenDataGrid<Faculty> grid;
 
@@ -112,8 +122,26 @@
 
     async Task OpenDiagram(int facultyId, string facultyName)
     {
+        var groups = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroupsByFacultyId?facultyId={facultyId}") ?? new();
+        bool noData = false;
+
+        if (groups.Count != 0)
+        {
+            var result = groups.FindLast(g => g.GroupAvgScore != 0);
+            if (result is not null) noData = false;
+            else noData = true;
+        }
+        else noData = true;
+
         var response = await DialogService.OpenAsync<FacultyDiagram>("Діаграми",
-        new Dictionary<string, object> { { "FacultyIdParameter", facultyId }, { "FacultyNameParameter", facultyName } },
-        new DialogOptions() { AutoFocusFirstElement = false });
+        new Dictionary<string, object> { /* { "FacultyIdParameter", facultyId }, */ { "FacultyNameParameter", facultyName }, { "Groups", groups }, { "NoData", noData } },
+        new DialogOptions() { AutoFocusFirstElement = false, Resizable=true });
+    }
+
+    async Task Search()
+    {
+
+        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>($"api/Faculty/GetAllFaculties?searchText={SearchText}") ?? new List<Faculty>();
+        grid?.Reload();
     }
 }

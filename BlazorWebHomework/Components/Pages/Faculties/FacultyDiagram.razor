@@ -5,55 +5,89 @@
 
 <div class="rz-p-sm-4">
     <RadzenMenu class="flex justify-between">
-        <RadzenMenuItem Text="Діаграма колонок" Click="(x => ChangeDiagramPage(DiagramPages.Series))" />
+        <RadzenMenuItem Text="Діаграма стовпців" Click="(x => ChangeDiagramPage(DiagramPages.Series))" />
         <RadzenMenuItem Text="Діаграма лінії" Click="(x => ChangeDiagramPage(DiagramPages.Line))" />
-        <RadzenMenuItem Text="Діаграма стовпців" Click="(x => ChangeDiagramPage(DiagramPages.Column))" />
+        <RadzenMenuItem Text="Діаграма секторів" Click="(x => ChangeDiagramPage(DiagramPages.Pie))" />
     </RadzenMenu>
 </div>
-<div Class="rz-p-0 rz-p-md-12" hidden="@(currentDiagramPage != DiagramPages.Series)">
-    <RadzenChart>
-        <RadzenColumnSeries Data="@Groups" CategoryProperty="GroupName" ValueProperty="GroupAvgScore" Title=" "/>
-    </RadzenChart>
-</div>
-<div class="container" hidden="@(currentDiagramPage != DiagramPages.Line)">
-    <div class="row">
-        <div class="col-sm-12 my-5 line-chart">
+
+<div>
+    @if (!NoData)
+    {
+        <div Class="" hidden="@(currentDiagramPage != DiagramPages.Series)">
             <RadzenChart>
-                <RadzenLineSeries  Smooth="true" Data="@Groups" CategoryProperty="GroupName" Title=" " ValueProperty="GroupAvgScore">
-                    <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
-                    <RadzenSeriesDataLabels Visible="false" />
-                </RadzenLineSeries>
-                <RadzenCategoryAxis Padding="20"/>
-                <RadzenValueAxis>
+                <RadzenColumnSeries Data="@Groups" CategoryProperty="GroupName" ValueProperty="GroupAvgScore" Title=" " />
+                <RadzenColumnSeries Data="@Groups" CategoryProperty="GroupName" ValueProperty="GroupAvgScore" Title=" " Visible="false" />
+                <RadzenValueAxis Min="0" Max="100" Step="20">
                     <RadzenGridLines Visible="true" />
-                    <RadzenAxisTitle Text="Середній бал групи"/>
+                    <RadzenAxisTitle Text="Середній бал групи" />
                 </RadzenValueAxis>
+                <RadzenLegend Visible="false" />
+                <RadzenColumnOptions Radius="5" Width="20" />
+                <RadzenCategoryAxis Padding="1" />
             </RadzenChart>
         </div>
+        <div class="container" hidden="@(currentDiagramPage != DiagramPages.Line)">
+            <div class="row">
+                <div class="col-sm-12 my-5 line-chart">
+                    <RadzenChart>
+                        <RadzenLineSeries Smooth="true" Data="@Groups" CategoryProperty="GroupName" Title=" " ValueProperty="GroupAvgScore">
+                            <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
+                            <RadzenSeriesDataLabels Visible="false" />
+                        </RadzenLineSeries>
+                        <RadzenCategoryAxis Padding="20" />
+                        <RadzenValueAxis Min="0" Max="100" Step="20">
+                            <RadzenGridLines Visible="true" />
+                            <RadzenAxisTitle Text="Середній бал групи" />
+                        </RadzenValueAxis>
+                        <RadzenLegend Visible="false" />
+                    </RadzenChart>
+                </div>
+            </div>
+        </div>
+        <div class="container" hidden="@(currentDiagramPage != DiagramPages.Pie)">
+            <RadzenChart>
+                <RadzenPieSeries Data="@Groups" Title="Середній бал групи" CategoryProperty="GroupName" ValueProperty="GroupAvgScore">
+                    <RadzenSeriesDataLabels Visible="true" />
+                </RadzenPieSeries>
+                <RadzenLegend Visible="true" />
+            </RadzenChart>
+        </div>
+    }
+</div>
+
+<div class="container h-[300px] flex justify-around items-center" hidden="@(currentDiagramPage != DiagramPages.None)">
+    <div class="row">
+        <p><b style="font-size: 36px;">ДАНІ ВІДСУТНІ</b></p>
     </div>
 </div>
 
 @code {
-    DiagramPages currentDiagramPage { get; set; } = DiagramPages.Series;
-    List<Group> Groups { get; set; } = new();
-    [Parameter] public int FacultyIdParameter { get; set; }
+    DiagramPages currentDiagramPage { get; set; }
+
+    [Parameter] public bool NoData { get; set; } = true;
     [Parameter] public string FacultyNameParameter { get; set; } = string.Empty;
+    [Parameter] public List<Group> Groups { get; set; } = new();
 
     enum DiagramPages
     {
         Series,
         Line,
-        Bar,
-        Column,
+        Pie,
+        None
     }
 
     protected override async Task OnInitializedAsync()
     {
-        Groups = await HttpClient.GetFromJsonAsync<List<Group>>($"api/Group/GetGroupsByFacultyId?facultyId={FacultyIdParameter}") ?? new();
+        ChangeDiagramPage(DiagramPages.Series);
     }
 
     void ChangeDiagramPage(DiagramPages diagramPage)
     {
-        currentDiagramPage = diagramPage;
+        if (!NoData)
+            currentDiagramPage = diagramPage;
+        else
+            currentDiagramPage = DiagramPages.None;
+
     }
 }

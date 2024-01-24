@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[sp_Faculties_GetAllFaculties]
+    @searchText nvarchar(255) = NULL
 AS
     SELECT
         f.FacultyId,
@@ -11,3 +12,4 @@ AS
         f.FacultyNotes
     FROM
         Faculties f
+    WHERE (@searchText IS NULL OR (FacultyName) LIKE '%' + @searchText + '%')
