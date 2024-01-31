@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace MINT_WebAPI
 {
     public class Program
@@ -6,6 +8,14 @@ namespace MINT_WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("./Logs/log-.txt",
+                    rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+
+            builder.Host.UseSerilog();
 
             builder.Services.AddCors();
             builder.Services.AddControllers();
@@ -13,6 +23,8 @@ namespace MINT_WebAPI
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            app.UseSerilogRequestLogging();
 
             app.UseCors(builder => builder.AllowAnyOrigin()
                              .AllowAnyHeader()
