@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using BlazorWebHomework.Models;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Data.Common;
 
 
 namespace BlazorWebHomeworkAPI.Controllers
@@ -27,12 +29,12 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -47,12 +49,13 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
+
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -68,12 +71,12 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -89,12 +92,12 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -110,119 +113,14 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
-
-        //[HttpGet("GetFaculties")]
-        //public IActionResult GetFaculties()
-        //{
-        //    try
-        //    {
-        //        var faculties = _facultyDataController.GetFaculties();
-        //        return Ok(faculties);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest("Problem with database");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpGet("GetFacultyById")]
-        //public IActionResult GetFacultyById(int id)
-        //{
-        //    try
-        //    {
-        //        var faculty = _facultyDataController.GetFacultyById(id);
-
-        //        if (faculty == null) return BadRequest("Error, object was not found");
-        //        return Ok(faculty);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest("Problem with database");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpPost("CreateFaculty")]
-        //public IActionResult CreateStore(Faculty faculty)
-        //{
-        //    try
-        //    {
-        //        var result = _facultyDataController.CreateFaculty(faculty);
-        //        if (result == 0) return BadRequest(new { Message = "Faculty was not created" });
-        //        return Ok(result);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest("Problem with database");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpPut("UpdateFaculty")]
-        //public IActionResult UpdateFaculty(Faculty faculty)
-        //{
-        //    try
-        //    {
-        //        var result = _facultyDataController.UpdateFaculty(faculty);
-        //        if (result == 0) return BadRequest(new { Message = "Faculty was not updated" });
-        //        return Ok(result);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest("Problem with database");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpDelete("DeleteFaculty")]
-        //public IActionResult DeleteFaculty(int facultyId)
-        //{
-        //    try
-        //    {
-        //        var result = _facultyDataController.DeleteFaculty(facultyId);
-        //        if (result == 0) return BadRequest(new { Message = "Faculty was not deleted" });
-        //        return Ok(result);
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest("Problem with database");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //        return BadRequest();
-        //    }
-        //}
     }
 }

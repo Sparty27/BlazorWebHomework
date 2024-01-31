@@ -1,4 +1,4 @@
-using Serilog;
+global using Serilog;
 
 namespace MINT_WebAPI
 {
@@ -12,6 +12,9 @@ namespace MINT_WebAPI
                 .WriteTo.Console()
                 .WriteTo.File("./Logs/log-.txt",
                     rollingInterval: RollingInterval.Day)
+                .WriteTo.File("./Logs/log-important-.txt",
+                    rollingInterval: RollingInterval.Day,
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
                 .CreateLogger();
 
 
