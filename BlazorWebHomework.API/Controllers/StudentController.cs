@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using BlazorWebHomework.Models;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Data.Common;
 
 
 namespace BlazorWebHomeworkAPI.Controllers
