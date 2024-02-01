@@ -52,7 +52,7 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -74,7 +74,7 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -95,7 +95,7 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -116,7 +116,7 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -137,7 +137,7 @@ namespace BlazorWebHomeworkAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }

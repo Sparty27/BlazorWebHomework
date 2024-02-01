@@ -27,12 +27,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -47,12 +47,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -66,12 +66,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -88,12 +88,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -108,12 +108,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -129,12 +129,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -150,12 +150,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }
@@ -171,12 +171,12 @@ namespace BlazorWebHomework.API.Controllers
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Problem with database. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest("Problem with database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error("Exception. Message: " + ex.Message + " Stack calls: " + ex.StackTrace);
                 return BadRequest();
             }
         }

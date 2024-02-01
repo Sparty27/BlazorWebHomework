@@ -94,13 +94,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        students = await HttpClient.GetFromJsonAsync<List<Student>>("api/Student/GetAllStudents") ?? new List<Student>();
+        try
+        {
+            students = await HttpClient.GetFromJsonAsync<List<Student>>("api/Student/GetAllStudents") ?? new List<Student>();
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("/404");
+        }
     }
 
     async Task Search()
     {
-
-        students = await HttpClient.GetFromJsonAsync<List<Student>>($"api/Student/GetAllStudents?searchText={SearchText}") ?? new List<Student>();
+        try
+        {
+            students = await HttpClient.GetFromJsonAsync<List<Student>>($"api/Student/GetAllStudents?searchText={SearchText}") ?? new List<Student>();
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("/404");
+        }
     }
 
     async Task CreateStudent()

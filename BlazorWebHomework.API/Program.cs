@@ -28,7 +28,7 @@ namespace MINT_WebAPI
                 .Filter.ByExcluding("RequestPath = '/swagger/v1/swagger.json'")
                 .CreateLogger();
 
-            builder.Host.UseSerilog();
+            //builder.Host.UseSerilog();
 
             builder.Services.AddCors();
             builder.Services.AddControllers(options =>

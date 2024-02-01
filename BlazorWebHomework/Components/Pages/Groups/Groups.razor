@@ -79,9 +79,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>($"api/Group/GetCount?searchText={SearchText}") ?? 0;
+        try
+        {
+            pagerProperties.Count = await HttpClient.GetFromJsonAsync<int?>($"api/Group/GetCount?searchText={SearchText}") ?? 0;
 
-        groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+            groups = await GetGroups(pagerProperties.Skip, pagerProperties.PageSize);
+        }
+        catch (Exception)
+        {
+            Navigation.NavigateTo("/404");
+        }
     }
 
     async Task Search()

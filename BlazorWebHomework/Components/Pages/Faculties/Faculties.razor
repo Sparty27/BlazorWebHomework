@@ -104,7 +104,23 @@
 
     protected override async Task OnInitializedAsync()
     {
-        faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetAllFaculties") ?? new List<Faculty>();
+        try
+        {
+            faculties = await HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetAllFaculties") ?? new List<Faculty>();
+
+            // var task = Task.Run(() =>
+            // {
+            // var req = HttpClient.GetFromJsonAsync<List<Faculty>>("api/Faculty/GetAllFaculties");
+            // if (!req.Wait(1000))
+            //     throw new TaskCanceledException(req);
+            // });
+
+            // task.Wait();
+        }
+        catch(Exception)
+        {
+            Navigation.NavigateTo("/404");
+        }
     }
 
     async Task CreateFaculty()
